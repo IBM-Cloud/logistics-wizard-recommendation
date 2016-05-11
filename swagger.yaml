@@ -12,28 +12,3 @@ schemes:
 basePath: /v1
 produces:
   - application/json
-paths:
-  /recommendations:
-    get:
-      summary: Get recommendations
-      description: |
-        Returns all the recommndations from the logistics wizard.
-      parameters:
-        - name: Authorization
-          in: header
-          description: Bearer token
-          required: true
-          type: string
-      tags:
-        - Recommendations
-      responses:
-        200:
-          description: An array of recommendations
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Recommendation'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/Error'
