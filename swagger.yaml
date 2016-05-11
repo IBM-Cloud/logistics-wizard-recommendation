@@ -1,1 +1,39 @@
-
+swagger: '2.0'
+info:
+  title: Logistics Wizard Recommendation API
+  description: The recommendation service of logistic wizard, interfacing with the controlling services.
+  version: "1.0.0"
+# the domain of the service
+host: 
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /recommendations:
+    get:
+      summary: Get recommendations
+      description: |
+        Returns all the recommndations from the logistics wizard.
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token
+          required: true
+          type: string
+      tags:
+        - Recommendations
+      responses:
+        200:
+          description: An array of recommendations
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Recommendation'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
