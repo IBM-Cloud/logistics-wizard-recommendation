@@ -37,7 +37,6 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
     recommend -> erp
     ui -> erp
     {rank=same; ui -> erp [style=invis] }
-    /* styling */
     recommend [label="Recommend"]
     retrieve [label="Retrieve"]
     acknowledge [label="Acknowledge"]
@@ -46,6 +45,48 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
     database [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Database"]
   }
 )
+
+## Running the app on Bluemix
+
+1. If you do not already have a Bluemix account, [sign up here](https://ibm.com/bluemix)
+
+1. Clone the app to your local environment from your terminal using the following command:
+
+  ```
+  git clone https://github.com/IBM-Bluemix/logistics-wizard-recommendation.git
+  ```
+
+1. `cd` into the actions directory
+
+  ```
+  cd logistics-wizard-recommendation/actions
+  ```
+
+1. Get the dependencies
+
+  ```
+  npm install
+  ```
+
+1. `cd` to the parent directory
+
+  ```
+  cd ..
+  ```
+
+1. Ensure your [OpenWhisk command line interface](https://console.ng.bluemix.net/openwhisk/cli) is property configured with:
+
+  ```
+  wsk list
+  ```
+
+  This shows the packages, actions, triggers and rules currently deployed in your OpenWhisk namespace.
+
+1. Deploy the OpenWhisk artifacts
+
+  ```
+  ./deploy.sh --install
+  ```
 
 ## Code Structure
 
@@ -56,6 +97,15 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
 |[**retrieve.js**](actions/retrieve.js)|Entry point for the Retrieve action.|
 |[**acknowledge.js**](actions/acknowledge.js.js)|Entry point for the Acknowledge action.|
 |[**package.json**](actions/package.js)|List dependencies used by the actions.|
+|[**webpack.config.js**](actions/webpack.config.js)|Webpack configuration used to build OpenWhisk actions. This allows the service to use modules (module versions) not packaged natively by OpenWhisk.|
+
+## Troubleshooting
+
+Polling activations is good start to debug the OpenWhisk action execution. Run
+```
+wsk activation poll
+```
+and invoke actions.
 
 ## License
 
