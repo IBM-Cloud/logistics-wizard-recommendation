@@ -21,16 +21,17 @@ source local.env
 CURRENT_NAMESPACE=`wsk property get --namespace | awk '{print $3}'`
 echo "Current namespace is $CURRENT_NAMESPACE."
 
-PACKAGE_NAME=logistics-wizard-recommendation
+# PACKAGE_NAME is configurable so that multiple versions of the actions
+# can be deployed in different packages under the same namespace
+if [ -z $PACKAGE_NAME ]; then
+  PACKAGE_NAME=logistics-wizard-recommendation
+fi
 
 function usage() {
   echo "Usage: $0 [--install,--uninstall,--update,--env]"
 }
 
 function install() {
-  echo "Building actions..."
-  (cd actions && npm run build);
-
   echo "Creating $PACKAGE_NAME package"
   wsk package create $PACKAGE_NAME
 
@@ -54,9 +55,6 @@ function uninstall() {
 }
 
 function update() {
-  echo "Building actions..."
-  (cd actions && npm run build);
-
   echo "Updating actions..."
   wsk action update $PACKAGE_NAME/recommend   actions/dist/recommend.bundle.js
   wsk action update $PACKAGE_NAME/retrieve    actions/dist/retrieve.bundle.js
@@ -64,7 +62,7 @@ function update() {
 }
 
 function showenv() {
-  echo "No env"
+  echo "PACKAGE_NAME=$PACKAGE_NAME"
 }
 
 case "$1" in
