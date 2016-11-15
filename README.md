@@ -10,11 +10,11 @@ This service is part of the larger [Logistics Wizard](https://github.com/IBM-Blu
 
 ## Overview
 
-This service monitors the weather conditions around retail stores and make recommendation on additional shipments of goods.
+This service monitors the weather conditions around retail stores and makes recommendations on additional shipments of goods.
 
 It is built with OpenWhisk highlighting how OpenWhisk can be used to implement a backend API. The OpenWhisk actions are:
 
-  * **Recommend** - given weather conditions, it evaluates the impact of the weather on shipments and stocks and make recommendations for additional shipments, rerouting, etc.
+  * **Recommend** - given weather conditions, it evaluates the impact of the weather on shipments and stocks and makes recommendations for additional shipments, rerouting, etc.
 
   * **Retrieve** - returns the recommendations to be considered by a retail store manager.
 
@@ -62,10 +62,11 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
   cd logistics-wizard-recommendation/actions
   ```
 
-1. Get the dependencies
+1. Get the dependencies, and use [webpack module bundler](https://webpack.github.io/) to create our final .js actions in the `dist` folder.
 
   ```
   npm install
+  npm run build
   ```
 
 1. `cd` to the parent directory
