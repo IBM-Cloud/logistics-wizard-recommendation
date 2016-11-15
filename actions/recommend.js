@@ -16,7 +16,7 @@
 
 exports.main = global.main = (args) => {
   console.log('New weather event for demo', args.guid, 'at latitude',
-    args.event.latitude, 'and longitude', args.event.longitude);
+    args.event.metadata.latitude, 'and longitude', args.event.metadata.longitude);
 
   whisk.done({
     guid: args.guid,
