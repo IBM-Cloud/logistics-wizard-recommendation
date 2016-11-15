@@ -96,8 +96,9 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
 |[**recommend.js**](actions/recommend.js)|Entry point for the Recommend action.|
 |[**retrieve.js**](actions/retrieve.js)|Entry point for the Retrieve action.|
 |[**acknowledge.js**](actions/acknowledge.js.js)|Entry point for the Acknowledge action.|
+|[**webpack.config.js**](actions/webpack.config.js)|Webpack configuration used to build OpenWhisk actions. This allows the actions to use modules (module versions) not packaged natively by OpenWhisk. Make sure to add explicit dependencies in the package.json for specific module versions used by the actions. The webpack build will look at the "dependencies" and *webpack* them. If a module is not listen in "dependencies" it is assumed to be provided by OpenWhisk.|
 |[**package.json**](actions/package.js)|List dependencies used by the actions.|
-|[**webpack.config.js**](actions/webpack.config.js)|Webpack configuration used to build OpenWhisk actions. This allows the service to use modules (module versions) not packaged natively by OpenWhisk.|
+|[**test**](actions/test)|Unit test for the actions to be executed outside of OpenWhisk.|
 
 ## Troubleshooting
 
