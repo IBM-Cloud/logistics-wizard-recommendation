@@ -56,23 +56,13 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
   git clone https://github.com/IBM-Bluemix/logistics-wizard-recommendation.git
   ```
 
-1. `cd` into the actions directory
-
-  ```
-  cd logistics-wizard-recommendation/actions
-  ```
+1. `cd` into the checkout directory
 
 1. Get the dependencies, and use [webpack module bundler](https://webpack.github.io/) to create our final .js actions in the `dist` folder.
 
   ```
   npm install
   npm run build
-  ```
-
-1. `cd` to the parent directory
-
-  ```
-  cd ..
   ```
 
 1. Ensure your [OpenWhisk command line interface](https://console.ng.bluemix.net/openwhisk/cli) is property configured with:
