@@ -13,61 +13,93 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- const request = require('request');
- const geolib = require('geolib');
 
- exports.main = global.main = (args) => {
-   console.log('New weather event for demo', args.guid, 'at latitude',
-    args.event.metadata.latitude, 'and longitude', args.event.metadata.longitude);
+const async = require('async');
+const geolib = require('geolib');
 
-   const token = args.token;
-   const stormLatitude = args.event.metadata.latitude || 38.89;
-   const stormLongitude = args.event.metadata.latitude || -77.03;
-   const url = `https://dev-logistics-wizard-controller.mybluemix.net/api/v1/demos/${token}/retailers`;
-    // console.log(url);
+/**
+ * @param demoGuid - the demo environment to use
+ * @param accessToken - the token to use to access the controller service API
+ * @param event - the weather event to analyze
+ * @param services.controller.url - URL to the controller service
+ */
+exports.main = global.main = (args) => {
+  console.log('New weather event for demo', args.demoGuid,
+    'at latitude', args.event.metadata.latitude,
+    'and longitude', args.event.metadata.longitude);
 
-   const stormLocation = { latitude: stormLatitude, longitude: stormLongitude };
+  async.waterfall([
+    // retrieve list of retailers
+    function(callback) {
+      getRetailers(args['services.controller.url'],
+        args.demoGuid, args.accessToken, callback);
+    },
+    // identify retailers affected by the weather event
+    function(retailers, callback) {
+      filterRetailers(retailers, args.event, callback);
+    },
+    // retrieve their stock and make new shipments
+    function(retailers, callback) {
+      recommend(retailers, callback);
+    },
+  ], (err, result) => {
+    if (err) {
+      console.log('[KO]', err);
+      whisk.done(null, err);
+    } else {
+      console.log('[OK] Got', result.length, 'recommendations');
+      whisk.done({
+        guid: args.guid,
+        event: args.event,
+        recommendations: result,
+      });
+    }
+  });
+};
 
-   const recommendations = [];
+function getRetailers(controllerUrl, demoGuid, accessToken, callback) {
+  // const url = `${controllerUrl}/api/v1/demos/${token}/retailers`;
+  console.log('Retrieving retailers...');
+  callback(null, []);
+}
+exports.getRetailers = getRetailers;
 
-  // get all retail locations from API
-   return new Promise((resolve, reject) => {
-     request.get(url, (error, response, body) => {
-       if (error) {
-         reject(error);
-       } else {
-         const retailLocations = JSON.parse(body);
+/**
+ * Filter retailers based on the weather event
+ */
+function filterRetailers(retailers, event, callback) {
+  console.log('Filtering retailers...');
 
-          // loop thru retail locations
-         retailLocations.forEach((rl) => {
-            // get gps coordinate
-           const retailLocation = { latitude: rl.address.latitude, longitude: rl.address.longitude };
-            // console.log(retailLocation);
+  const filtered = [];
+  const stormLocation = {
+    latitude: event.metadata.latitude,
+    longitude: event.metadata.longitude
+  };
 
-            // calculate distance
-           const distance = geolib.getDistance(stormLocation, retailLocation);
+  retailers.forEach((retailer) => {
+    // get gps coordinate
+    const retailLocation = {
+      latitude: retailer.address.latitude,
+      longitude: retailer.address.longitude
+    };
 
-            // console.log(stormLocation);
-            // console.log(retailLocation);
-            // console.log(distance);
+    // calculate distance
+    const distance = geolib.getDistance(stormLocation, retailLocation);
+    console.log('Distance between', retailer.address.city, 'and event is', distance);
 
-            // if its within 800km
-           if (distance < 800000) {
-             console.log(`Affected Location: ${rl.address.city}`);
-             recommendations.push(rl);
-           }
-           // console.log(distance);
-         });
+    // if its within 800km
+    if (distance < 800000) {
+      console.log(`Affected Location: ${retailer.address.city}`);
+      filtered.push(retailer);
+    }
+  });
 
-         whisk.done({
-           guid: args.guid,
-           event: args.event,
-           recommendations: [],
-         });
+  callback(null, filtered);
+}
+exports.filterRetailers = filterRetailers;
 
-          // generate recommendation
-         resolve({ msg: body });
-       }
-     });
-   });
- };
+function recommend(retailers, callback) {
+  console.log('Making recommendations...');
+  callback(null, []);
+}
+exports.recommend = recommend;

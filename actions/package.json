@@ -9,7 +9,8 @@
     "localcoverage": "istanbul cover _mocha test/*.js --report html -- -R spec --timeout 300000"
   },
   "dependencies": {
-    "cloudant": "^1.6.2"
+    "cloudant": "^1.6.2",
+    "geolib": "^2.0.22"
   },
   "devDependencies": {
     "babel-core": "^6.7.6",
