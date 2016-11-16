@@ -33,7 +33,8 @@ function usage() {
 
 function install() {
   echo "Creating $PACKAGE_NAME package"
-  wsk package create $PACKAGE_NAME
+  wsk package create $PACKAGE_NAME\
+    -p services.controller.url $CONTROLLER_SERVICE
 
   echo "Creating actions"
   wsk action create $PACKAGE_NAME/recommend   dist/recommend.bundle.js
@@ -63,6 +64,7 @@ function update() {
 
 function showenv() {
   echo "PACKAGE_NAME=$PACKAGE_NAME"
+  echo "CONTROLLER_SERVICE=$CONTROLLER_SERVICE"
 }
 
 case "$1" in
