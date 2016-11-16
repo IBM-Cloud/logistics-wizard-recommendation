@@ -42,14 +42,14 @@ describe('Recommend', () => {
     // prepare to catch calls to whisk to capture the results and validate
     global.whisk = {
       done: function(result, err) {
-        assert.equal('MyGUID', result.guid);
+        assert.equal('MyGUID', result.demoGuid);
         assert.equal(0, result.recommendations.length);
         done(null);
       }
     };
 
     recommend.main({
-      guid: 'MyGUID',
+      demoGuid: 'MyGUID',
       event: {
         metadata: {
           latitude: 45.0,
@@ -57,7 +57,6 @@ describe('Recommend', () => {
         },
       },
     });
-
   });
 
 });

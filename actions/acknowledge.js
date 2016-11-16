@@ -15,10 +15,10 @@
  */
 
 exports.main = global.main = (args) => {
-  console.log('Acknowledge recommendation for demo', args.guid,
+  console.log('Acknowledge recommendation for demo', args.demoGuid,
     'and recommendation', args.recommendations);
 
   whisk.done({
-    guid: args.guid,
+    demoGuid: args.demoGuid,
   });
 };

@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
+/**
+ * @module recommend
+ */
 const async = require('async');
 const GeoPoint = require('geopoint');
 
 /**
- * @param demoGuid - the demo environment to use
- * @param accessToken - the token to use to access the controller service API
- * @param event - the weather event to analyze
- * @param services.controller.url - URL to the controller service
+ * OpenWhisk entry point.
+ *
+ * @param {Object} args Expected arguments:
+ * <li> {string} demoGuid - the demo environment to use
+ * <li> {string} accessToken - the token to use to access the controller service API
+ * <li> {Object} event - the weather event to analyze
+ * <li> {string} services.controller.url - URL to the controller service
  */
 exports.main = global.main = (args) => {
   console.log('New weather event for demo', args.demoGuid,
@@ -49,7 +55,7 @@ exports.main = global.main = (args) => {
     } else {
       console.log('[OK] Got', result.length, 'recommendations');
       whisk.done({
-        guid: args.guid,
+        demoGuid: args.demoGuid,
         event: args.event,
         recommendations: result,
       });
@@ -57,6 +63,10 @@ exports.main = global.main = (args) => {
   });
 };
 
+/**
+ * Returns the list of retailers in the given demo.
+ * @param callback err, retailers
+ */
 function getRetailers(controllerUrl, demoGuid, accessToken, callback) {
   // const url = `${controllerUrl}/api/v1/demos/${token}/retailers`;
   console.log('Retrieving retailers...');
@@ -65,7 +75,11 @@ function getRetailers(controllerUrl, demoGuid, accessToken, callback) {
 exports.getRetailers = getRetailers;
 
 /**
- * Filter retailers based on the weather event
+ * Filters retailers based on the weather event
+ *
+ * @param {Object[]} retailers
+ * @param {Object} event
+ * @param callback - err, filtered retailers
  */
 function filterRetailers(retailers, event, callback) {
   console.log('Filtering retailers...');

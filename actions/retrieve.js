@@ -15,13 +15,10 @@
  */
 
 exports.main = global.main = (args) => {
-  console.log('Retrieve recommendations for demo', args.guid);
+  console.log('Retrieve recommendations for demo', args.demoGuid);
 
-  const async = require('async');
-  async.waterfall([], (result, err) => {
-    whisk.done({
-      guid: args.guid,
-      recommendations: [],
-    }, err);
+  whisk.done({
+    demoGuid: args.demoGuid,
+    recommendations: [],
   });
 };
