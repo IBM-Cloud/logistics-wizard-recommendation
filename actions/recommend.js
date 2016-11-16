@@ -15,7 +15,7 @@
  */
 
 const async = require('async');
-const geolib = require('geolib');
+const GeoPoint = require('geopoint');
 
 /**
  * @param demoGuid - the demo environment to use
@@ -71,24 +71,20 @@ function filterRetailers(retailers, event, callback) {
   console.log('Filtering retailers...');
 
   const filtered = [];
-  const stormLocation = {
-    latitude: event.metadata.latitude,
-    longitude: event.metadata.longitude
-  };
+  const stormLocation = new GeoPoint(
+    event.metadata.latitude,
+    event.metadata.longitude);
 
   retailers.forEach((retailer) => {
     // get gps coordinate
-    const retailLocation = {
-      latitude: retailer.address.latitude,
-      longitude: retailer.address.longitude
-    };
+    const retailLocation = new GeoPoint(retailer.address.latitude, retailer.address.longitude);
 
     // calculate distance
-    const distance = geolib.getDistance(stormLocation, retailLocation);
+    const distance = retailLocation.distanceTo(stormLocation, true);
     console.log('Distance between', retailer.address.city, 'and event is', distance);
 
     // if its within 800km
-    if (distance < 800000) {
+    if (distance < 800) {
       console.log(`Affected Location: ${retailer.address.city}`);
       filtered.push(retailer);
     }

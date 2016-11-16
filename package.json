@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "cloudant": "^1.6.2",
-    "geolib": "^2.0.22"
+    "geopoint": "^1.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.7.6",
