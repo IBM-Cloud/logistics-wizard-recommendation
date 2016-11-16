@@ -29,7 +29,7 @@ const GeoPoint = require('geopoint');
  * <li> {Object} event - the weather event to analyze
  * <li> {string} services.controller.url - URL to the controller service
  */
-exports.main = global.main = (args) => {
+function main(args) {
   console.log('New weather event for demo', args.demoGuid,
     'at latitude', args.event.metadata.latitude,
     'and longitude', args.event.metadata.longitude);
@@ -61,7 +61,8 @@ exports.main = global.main = (args) => {
       });
     }
   });
-};
+}
+exports.main = global.main = main;
 
 /**
  * Returns the list of retailers in the given demo.
@@ -108,6 +109,12 @@ function filterRetailers(retailers, event, callback) {
 }
 exports.filterRetailers = filterRetailers;
 
+/**
+ * Generates recommendation for the given retails.
+ *
+ * @param {Object[]} retailers
+ * @param callback - err, recommendations
+ */
 function recommend(retailers, callback) {
   console.log('Making recommendations...');
   callback(null, []);
