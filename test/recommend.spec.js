@@ -1,4 +1,4 @@
-const recommend = require('../recommend.js');
+const recommend = require('../actions/recommend.js');
 const assert = require('chai').assert;
 
 describe('Recommend', () => {

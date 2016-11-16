@@ -36,9 +36,9 @@ function install() {
   wsk package create $PACKAGE_NAME
 
   echo "Creating actions"
-  wsk action create $PACKAGE_NAME/recommend   actions/dist/recommend.bundle.js
-  wsk action create $PACKAGE_NAME/retrieve    actions/dist/retrieve.bundle.js
-  wsk action create $PACKAGE_NAME/acknowledge actions/dist/acknowledge.bundle.js
+  wsk action create $PACKAGE_NAME/recommend   dist/recommend.bundle.js
+  wsk action create $PACKAGE_NAME/retrieve    dist/retrieve.bundle.js
+  wsk action create $PACKAGE_NAME/acknowledge dist/acknowledge.bundle.js
 }
 
 function uninstall() {
@@ -56,9 +56,9 @@ function uninstall() {
 
 function update() {
   echo "Updating actions..."
-  wsk action update $PACKAGE_NAME/recommend   actions/dist/recommend.bundle.js
-  wsk action update $PACKAGE_NAME/retrieve    actions/dist/retrieve.bundle.js
-  wsk action update $PACKAGE_NAME/acknowledge actions/dist/acknowledge.bundle.js
+  wsk action update $PACKAGE_NAME/recommend   dist/recommend.bundle.js
+  wsk action update $PACKAGE_NAME/retrieve    dist/retrieve.bundle.js
+  wsk action update $PACKAGE_NAME/acknowledge dist/acknowledge.bundle.js
 }
 
 function showenv() {

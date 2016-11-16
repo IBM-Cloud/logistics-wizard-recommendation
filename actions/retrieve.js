@@ -17,9 +17,7 @@
 exports.main = global.main = (args) => {
   console.log('Retrieve recommendations for demo', args.guid);
 
-  const cloudant = require('cloudant');
   const async = require('async');
-
   async.waterfall([], (result, err) => {
     whisk.done({
       guid: args.guid,

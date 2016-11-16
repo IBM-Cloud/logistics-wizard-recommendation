@@ -6,9 +6,9 @@ const dependencies = require('./package.json').dependencies;
 module.exports = {
 
   entry: {
-    recommend: `${__dirname}/recommend`,
-    retrieve: `${__dirname}/retrieve`,
-    acknowledge: `${__dirname}/acknowledge`,
+    recommend: `${__dirname}/actions/recommend`,
+    retrieve: `${__dirname}/actions/retrieve`,
+    acknowledge: `${__dirname}/actions/acknowledge`,
   },
   output: {
     path: path.join(__dirname, 'dist'),
