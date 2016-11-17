@@ -37,9 +37,15 @@ function install() {
     -p services.controller.url $CONTROLLER_SERVICE
 
   echo "Creating actions"
-  wsk action create $PACKAGE_NAME/recommend   dist/recommend.bundle.js
-  wsk action create $PACKAGE_NAME/retrieve    dist/retrieve.bundle.js
-  wsk action create $PACKAGE_NAME/acknowledge dist/acknowledge.bundle.js
+  wsk action create $PACKAGE_NAME/recommend\
+    -a description 'Recommend new shipments based on weather conditions'\
+    dist/recommend.bundle.js
+  wsk action create $PACKAGE_NAME/retrieve\
+    -a description 'Return the list of recommendations'\
+    dist/retrieve.bundle.js
+  wsk action create $PACKAGE_NAME/acknowledge\
+    -a description 'Acknowledge a list of recommendations'\
+    dist/acknowledge.bundle.js
 }
 
 function uninstall() {
