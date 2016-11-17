@@ -52,6 +52,8 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
 
 1. If you do not already have a Bluemix account, [sign up here](https://ibm.com/bluemix)
 
+1. The recommendation service depends on the [Controller](https://github.com/IBM-Bluemix/logistics-wizard-controller) and [ERP](https://github.com/IBM-Bluemix/logistics-wizard-erp) microservices. Make sure to deploy them first.
+
 1. Clone the app to your local environment from your terminal using the following command:
 
   ```
@@ -59,6 +61,14 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
   ```
 
 1. `cd` into the checkout directory
+
+1. Copy the file named template-local.env into local.env
+
+  ```
+  cp template-local.env local.env
+  ```
+
+1. In local.env, update the location of the CONTROLLER_SERVICE
 
 1. Get the dependencies, and use [webpack module bundler](https://webpack.github.io/) to create our final .js actions in the `dist` folder.
 
@@ -81,16 +91,19 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
   ./deploy.sh --install
   ```
 
+  Note: the script can also be used to --uninstall the OpenWhisk artifacts to --update the artifacts if you change the action code, or simply with --env to show the environment variables set in *local.env*.
+
 ## Code Structure
 
 | File | Description |
 | ---- | ----------- |
 |[**deploy.sh**](deploy.sh)|Helper script to install, uninstall, update the OpenWhisk trigger, actions, rules.|
+|[**template-local.env**](template-local.env)|Contains environment variables used by the deployment script. Duplicate this file into `local.env` to customize it for your environment.|
+|[**package.json**](package.json)|List dependencies used by the actions and the build process.|
+|[**webpack.config.js**](webpack.config.js)|Webpack configuration used to build OpenWhisk actions. This allows the actions to use modules (module versions) not packaged natively by OpenWhisk. Make sure to add explicit dependencies in the package.json for specific module versions used by the actions. The webpack build will look at the "dependencies" and *webpack* them. If a module is not listen in "dependencies" it is assumed to be provided by OpenWhisk.|
 |[**recommend.js**](actions/recommend.js)|Entry point for the Recommend action.|
 |[**retrieve.js**](actions/retrieve.js)|Entry point for the Retrieve action.|
 |[**acknowledge.js**](actions/acknowledge.js.js)|Entry point for the Acknowledge action.|
-|[**webpack.config.js**](webpack.config.js)|Webpack configuration used to build OpenWhisk actions. This allows the actions to use modules (module versions) not packaged natively by OpenWhisk. Make sure to add explicit dependencies in the package.json for specific module versions used by the actions. The webpack build will look at the "dependencies" and *webpack* them. If a module is not listen in "dependencies" it is assumed to be provided by OpenWhisk.|
-|[**package.json**](package.json)|List dependencies used by the actions.|
 |[**test**](test)|Unit test for the actions to be executed outside of OpenWhisk.|
 
 ## Troubleshooting
