@@ -14,11 +14,25 @@
  * limitations under the License.
  */
 
-exports.main = global.main = (args) => {
+/**
+ * @module retrieve
+ */
+
+/**
+ * OpenWhisk entry point.
+ *
+ * @param {Object} args Expected arguments:
+ * <li> {string} demoGuid - the demo environment to use
+ * @returns {Object}
+ * <li> {string} demoGuid
+ * <li> {Object[]} recommendations
+ */
+function main(args) {
   console.log('Retrieve recommendations for demo', args.demoGuid);
 
   whisk.done({
     demoGuid: args.demoGuid,
     recommendations: [],
   });
-};
+}
+exports.main = global.main = main;

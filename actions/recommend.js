@@ -28,6 +28,10 @@ const GeoPoint = require('geopoint');
  * <li> {string} accessToken - the token to use to access the controller service API
  * <li> {Object} event - the weather event to analyze
  * <li> {string} services.controller.url - URL to the controller service
+ * @returns {Object}
+ * <li> {string} demoGuid
+ * <li> {Object} event
+ * <li> {Object[]} recommendations
  */
 function main(args) {
   console.log('New weather event for demo', args.demoGuid,

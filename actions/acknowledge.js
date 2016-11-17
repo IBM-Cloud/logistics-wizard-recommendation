@@ -14,11 +14,25 @@
  * limitations under the License.
  */
 
-exports.main = global.main = (args) => {
+/**
+ * @module acknowledge
+ */
+
+/**
+ * OpenWhisk entry point.
+ *
+ * @param {Object} args Expected arguments:
+ * <li> {string} demoGuid - the demo environment to use
+ * <li> {Object[]} recommendations - the recommendations to acknowledge
+ * @returns {Object}
+ * <li> {string} demoGuid
+ */
+function main(args) {
   console.log('Acknowledge recommendation for demo', args.demoGuid,
     'and recommendation', args.recommendations);
 
   whisk.done({
     demoGuid: args.demoGuid,
   });
-};
+}
+exports.main = global.main = main;
