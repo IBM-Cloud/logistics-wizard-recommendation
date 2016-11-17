@@ -38,7 +38,7 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
     ui -> erp
     {rank=same; recommend -> retrieve -> retrieve [style=invis] }
     {rank=source; weather -> erp -> ui [style=invis]}
-    weather [shape=rect label="Weather Company\nData service" style=filled color="%234E96DB" fontcolor=white]
+    weather [shape=rect label="Weather Company\\nData service" style=filled color="%234E96DB" fontcolor=white]
     recommend [label="Recommend" color="%232e8c70" style=filled fontcolor=white]
     retrieve [label="Retrieve" color="%232e8c70" style=filled fontcolor=white]
     acknowledge [label="Acknowledge" color="%232e8c70" style=filled fontcolor=white]
