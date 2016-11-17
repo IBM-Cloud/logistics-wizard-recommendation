@@ -27,8 +27,8 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
 ![Architecture](http://g.gravizo.com/g?
   digraph G {
     node [fontname = "helvetica"]
-    rankdir=BT
-    ui -> recommend
+    rankdir=TB
+    weather -> recommend
     recommend -> database
     ui -> retrieve
     retrieve -> database
@@ -36,12 +36,14 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
     acknowledge -> database
     recommend -> erp
     ui -> erp
-    {rank=same; ui -> erp [style=invis] }
-    recommend [label="Recommend"]
-    retrieve [label="Retrieve"]
-    acknowledge [label="Acknowledge"]
-    erp [shape=rect label="ERP service"]
-    ui [label="Dashboard"]
+    {rank=same; recommend -> retrieve -> retrieve [style=invis] }
+    {rank=source; weather -> erp -> ui [style=invis]}
+    weather [shape=rect label="Weather Company\nData service" style=filled color="%234E96DB" fontcolor=white]
+    recommend [label="Recommend" color="%232e8c70" style=filled fontcolor=white]
+    retrieve [label="Retrieve" color="%232e8c70" style=filled fontcolor=white]
+    acknowledge [label="Acknowledge" color="%232e8c70" style=filled fontcolor=white]
+    erp [shape=rect label="ERP service" color="%238ec843" style=filled]
+    ui [label="Dashboard" color="%23e8c228" style=filled]
     database [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Database"]
   }
 )
