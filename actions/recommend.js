@@ -18,6 +18,7 @@
  * @module recommend
  */
 const async = require('async');
+const request = require('request');
 const GeoPoint = require('geopoint');
 
 /**
@@ -42,7 +43,7 @@ function main(args) {
     // retrieve list of retailers
     function(callback) {
       getRetailers(args['services.controller.url'],
-        args.demoGuid, args.accessToken, callback);
+        args.demoGuid, callback);
     },
     // identify retailers affected by the weather event
     function(retailers, callback) {
@@ -72,10 +73,18 @@ exports.main = global.main = main;
  * Returns the list of retailers in the given demo.
  * @param callback err, retailers
  */
-function getRetailers(controllerUrl, demoGuid, accessToken, callback) {
-  // const url = `${controllerUrl}/api/v1/demos/${token}/retailers`;
-  console.log('Retrieving retailers...');
-  callback(null, []);
+function getRetailers(controllerUrl, demoGuid, callback) {
+  const url = `${controllerUrl}/api/v1/demos/${demoGuid}/retailers`;
+  console.log(`Retrieving retailers... ${url}`);
+  request.get(url, (error, response, body) => {
+    if (error) {
+      console.log('getRetailers ERROR', error);
+      callback(null, []);
+    }
+    const retailLocations = JSON.parse(body);
+    console.log(`Got ${retailLocations.length} retailLocations.`);
+    callback(null, retailLocations);
+  });
 }
 exports.getRetailers = getRetailers;
 
@@ -121,6 +130,18 @@ exports.filterRetailers = filterRetailers;
  */
 function recommend(retailers, callback) {
   console.log('Making recommendations...');
-  callback(null, []);
+  const recommendations = [];
+  retailers.forEach((retailer) => {
+    const recommendation = {
+      status: 'NEW',
+      estimatedTimeOfArrival: '2016-10-16T00:00:00.000Z',
+      fromId: 1,
+      toId: retailer.id,
+      id: Math.floor((Math.random() * 1000) + 1)
+    };
+    recommendations.push(recommendation);
+  });
+
+  callback(null, recommendations);
 }
 exports.recommend = recommend;
