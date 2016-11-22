@@ -32,9 +32,6 @@ function usage() {
 }
 
 function install() {
-  echo "Building"
-  npm run build
-  
   echo "Creating $PACKAGE_NAME package"
   wsk package create $PACKAGE_NAME\
     -p services.controller.url $CONTROLLER_SERVICE
@@ -65,9 +62,6 @@ function uninstall() {
 }
 
 function update() {
-  echo "Building"
-  npm run build
-
   echo "Updating actions..."
   wsk action update $PACKAGE_NAME/recommend   dist/recommend.bundle.js
   wsk action update $PACKAGE_NAME/retrieve    dist/retrieve.bundle.js
