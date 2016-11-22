@@ -23,16 +23,16 @@
  *
  * @param {Object} args Expected arguments:
  * <li> {string} demoGuid - the demo environment to use
- * <li> {Object[]} recommendations - the recommendations to acknowledge
+ * <li> {string} recommendationId - the recommendation to acknowledge
  * @returns {Object}
  * <li> {string} demoGuid
  */
 function main(args) {
   console.log('Acknowledge recommendation for demo', args.demoGuid,
-    'and recommendation', args.recommendations);
+    'and recommendation', args.recommendationId);
 
   whisk.done({
-    demoGuid: args.demoGuid,
+    recommendationId: args.recommendationId
   });
 }
 exports.main = global.main = main;
