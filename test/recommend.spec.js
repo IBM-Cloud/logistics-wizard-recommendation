@@ -40,6 +40,36 @@ describe('Recommend', () => {
     });
   });
 
+  it('can fail during recommend', (done) => {
+    // prepare to catch calls to whisk to capture the results and validate
+    global.whisk = {
+      done: function(result, err) {
+        assert(err != null);
+        done(null);
+      },
+      async: function() {
+        // do nothing, whisk.done should get called
+      }
+    };
+
+    // intercept the call to retrieve retailers
+    nock('http://fail')
+      .get('/api/v1/demos/MyGUID/retailers')
+      .reply(500, []);
+
+    // trigger a recommendation
+    recommend.main({
+      demoGuid: 'MyGUID',
+      event: {
+        metadata: {
+          latitude: 38.89,
+          longitude: -77.03
+        },
+      },
+      "services.controller.url": 'http://fail'
+    });
+  });
+
   it('does recommendations', (done) => {
     // prepare to catch calls to whisk to capture the results and validate
     global.whisk = {
