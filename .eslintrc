@@ -15,6 +15,7 @@
     "whisk": true
   },
   "rules": {
+    "prefer-template": ["warn"],
     "comma-dangle": [0],
     "space-before-function-paren": ["error", "never"],
     "no-console": [0],
