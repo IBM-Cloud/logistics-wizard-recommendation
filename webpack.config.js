@@ -9,6 +9,7 @@ module.exports = {
     recommend: `${__dirname}/actions/recommend`,
     retrieve: `${__dirname}/actions/retrieve`,
     acknowledge: `${__dirname}/actions/acknowledge`,
+    observations: `${__dirname}/actions/observations`,
   },
   output: {
     path: path.join(__dirname, 'dist'),
