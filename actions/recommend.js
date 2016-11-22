@@ -66,6 +66,8 @@ function main(args) {
       });
     }
   });
+
+  return whisk.async();
 }
 exports.main = global.main = main;
 
@@ -105,6 +107,7 @@ function filterRetailers(retailers, event, callback) {
 
   retailers.forEach((retailer) => {
     // get gps coordinate
+    console.log('Looking at', retailer.address.city);
     const retailLocation = new GeoPoint(retailer.address.latitude, retailer.address.longitude);
 
     // calculate distance
