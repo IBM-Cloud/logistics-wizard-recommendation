@@ -20,6 +20,8 @@ It is built with OpenWhisk highlighting how OpenWhisk can be used to implement a
 
   * **Acknowledge** - marks the recommendations as processed (approved or rejected) by a retail store manager.
 
+  * **Observations** - returns weather conditions at a given location.
+
 ### Simulating weather events
 
 For demo purpose, the *Recommend* action can be called interactively to inject a weather event into the system.
@@ -31,6 +33,7 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
     weather -> recommend
     recommend -> database
     ui -> retrieve
+    ui -> observations
     retrieve -> database
     ui -> acknowledge
     acknowledge -> database
@@ -42,6 +45,7 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
     recommend [label="Recommend" color="%232e8c70" style=filled fontcolor=white]
     retrieve [label="Retrieve" color="%232e8c70" style=filled fontcolor=white]
     acknowledge [label="Acknowledge" color="%232e8c70" style=filled fontcolor=white]
+    observations [label="Observations" color="%232e8c70" style=filled fontcolor=white]
     erp [shape=rect label="ERP service" color="%238ec843" style=filled]
     ui [label="Dashboard" color="%23e8c228" style=filled]
     database [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Database"]
@@ -103,7 +107,8 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
 |[**webpack.config.js**](webpack.config.js)|Webpack configuration used to build OpenWhisk actions. This allows the actions to use modules (module versions) not packaged natively by OpenWhisk. Make sure to add explicit dependencies in the package.json for specific module versions used by the actions. The webpack build will look at the "dependencies" and *webpack* them. If a module is not listen in "dependencies" it is assumed to be provided by OpenWhisk.|
 |[**recommend.js**](actions/recommend.js)|Entry point for the Recommend action.|
 |[**retrieve.js**](actions/retrieve.js)|Entry point for the Retrieve action.|
-|[**acknowledge.js**](actions/acknowledge.js.js)|Entry point for the Acknowledge action.|
+|[**acknowledge.js**](actions/acknowledge.js)|Entry point for the Acknowledge action.|
+|[**observations.js**](actions/observations.js)|Entry point for the Observations action.|
 |[**test**](test)|Unit test for the actions to be executed outside of OpenWhisk.|
 
 ## Troubleshooting
