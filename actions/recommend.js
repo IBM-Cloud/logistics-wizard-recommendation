@@ -20,6 +20,7 @@
 const async = require('async');
 const request = require('request');
 const GeoPoint = require('geopoint');
+const Cloudant = require('cloudant');
 
 /**
  * OpenWhisk entry point.
@@ -28,6 +29,8 @@ const GeoPoint = require('geopoint');
  * <li> {string} demoGuid - the demo environment to use
  * <li> {Object} event - the weather event to analyze
  * <li> {string} services.controller.url - URL to the controller service
+ * <li> {string} services.cloudant.url - URL to the Cloudant service
+ * <li> {string} services.cloudant.database - Database to store recommendations
  * @returns {Object}
  * <li> {string} demoGuid
  * <li> {Object} event
@@ -52,6 +55,15 @@ function main(args) {
     function(retailers, callback) {
       recommend(retailers, callback);
     },
+    // persist the recommendations
+    function(recommendations, callback) {
+      persist(
+        args['services.cloudant.url'],
+        args['services.cloudant.database'],
+        args.demoGuid,
+        recommendations,
+        callback);
+    }
   ], (err, result) => {
     if (err) {
       console.log('[KO]', err);
@@ -142,8 +154,7 @@ function recommend(retailers, callback) {
       status: 'NEW',
       estimatedTimeOfArrival: '2016-10-16T00:00:00.000Z',
       fromId: 1,
-      toId: retailer.id,
-      id: Math.floor((Math.random() * 1000) + 1)
+      toId: retailer.id
     };
     recommendations.push(recommendation);
   });
@@ -151,3 +162,41 @@ function recommend(retailers, callback) {
   callback(null, recommendations);
 }
 exports.recommend = recommend;
+
+/**
+ * Persists the recommendations.
+ *
+ * @param {string} cloudantUrl
+ * @param {string} cloudantDatabase
+ * @param {string} demoGuid
+ * @param {Object[]} recommendations
+ * @param callback - err, persisted recommendations
+ */
+function persist(cloudantUrl, cloudantDatabase, demoGuid, recommendations, callback) {
+  console.log('Persisting', recommendations.length, 'recommendations...');
+  const cloudant = Cloudant({
+    url: cloudantUrl,
+    plugin: 'retry',
+    retryAttempts: 5,
+    retryTimeout: 500
+  });
+
+  cloudant.db.create(cloudantDatabase, () => {
+    const records = recommendations.map(reco => ({
+      guid: demoGuid, recommendation: reco }));
+    const db = cloudant.use(cloudantDatabase);
+    db.bulk({ docs: records }, { include_docs: true }, (bulkErr, result) => {
+      if (bulkErr) {
+        callback(bulkErr);
+      } else {
+        // inject the cloudant IDs into the recommendations
+        result.map((doc, index) => {
+          recommendations[index]._id = doc.id;
+          recommendations[index]._rev = doc.rev;
+        });
+        callback(null, recommendations);
+      }
+    });
+  });
+}
+exports.persist = persist;
