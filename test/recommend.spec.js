@@ -44,10 +44,8 @@ describe('Recommend', () => {
 
   it('filters retailers on event location', (done) => {
     const event = {
-      metadata: {
-        latitude: 38.89,
-        longitude: -77.03,
-      }
+        "lat": 38.89,
+        "lon": -77.03
     };
     recommend.filterRetailers(retailers, event, (err, filtered) => {
       assert.equal(1, filtered.length);
@@ -76,10 +74,8 @@ describe('Recommend', () => {
     recommend.main({
       demoGuid: 'MyGUID',
       event: {
-        metadata: {
-          latitude: 38.89,
-          longitude: -77.03
-        },
+        "lat": 38.89,
+        "lon": -77.03
       },
       "services.controller.url": 'http://fail'
     });
@@ -119,10 +115,8 @@ describe('Recommend', () => {
     recommend.main({
       demoGuid: 'MyGUID',
       event: {
-        metadata: {
-          latitude: 38.89,
-          longitude: -77.03
-        },
+        "lat": 38.89,
+        "lon": -77.03,
       },
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',

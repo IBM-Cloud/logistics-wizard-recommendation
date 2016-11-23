@@ -38,8 +38,8 @@ const Cloudant = require('cloudant');
  */
 function main(args) {
   console.log('New weather event for demo', args.demoGuid,
-    'at latitude', args.event.metadata.latitude,
-    'and longitude', args.event.metadata.longitude);
+    'at latitude', args.event.lat,
+    'and longitude', args.event.lon);
 
   async.waterfall([
     // retrieve list of retailers
@@ -49,6 +49,7 @@ function main(args) {
     },
     // identify retailers affected by the weather event
     function(retailers, callback) {
+      console.log('args.event: ....', args.event);
       filterRetailers(retailers, args.event, callback);
     },
     // retrieve their stock and make new shipments
@@ -117,8 +118,8 @@ function filterRetailers(retailers, event, callback) {
 
   const filtered = [];
   const stormLocation = new GeoPoint(
-    event.metadata.latitude,
-    event.metadata.longitude);
+    event.lat,
+    event.lon);
 
   retailers.forEach((retailer) => {
     // get gps coordinate
