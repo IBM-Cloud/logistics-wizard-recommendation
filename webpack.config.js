@@ -24,7 +24,7 @@ module.exports = {
     if (context.indexOf('node_modules') === -1 &&
       request.indexOf('/') === -1 &&
       !dependencies[request]) {
-      console.log(request, 'is assumed to be an external dependency');
+      console.log('...', request, 'is assumed to be an external dependency');
       callback(null, `commonjs ${request}`);
     } else {
       callback();

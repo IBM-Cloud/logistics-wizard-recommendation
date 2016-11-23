@@ -103,6 +103,18 @@ describe('Recommend', () => {
       .get('/api/v1/demos/MyGUID/retailers')
       .reply(200, retailers);
 
+    // intercept the call to persist recommendations
+    nock('http://cloudant')
+      .put('/recommendations')
+      .reply(200, '{"ok":true}')
+      .post('/recommendations/_bulk_docs?include_docs=true')
+      .reply(200, (uri, requestBody) => {
+        return requestBody.docs.map((row, index) => ({
+          'id': index,
+          'rev': 0
+        }));
+      });
+
     // trigger a recommendation
     recommend.main({
       demoGuid: 'MyGUID',
@@ -112,7 +124,9 @@ describe('Recommend', () => {
           longitude: -77.03
         },
       },
-      "services.controller.url": 'http://intercept'
+      'services.controller.url': 'http://intercept',
+      'services.cloudant.url': 'http://cloudant',
+      'services.cloudant.database': 'recommendations'
     });
   });
 

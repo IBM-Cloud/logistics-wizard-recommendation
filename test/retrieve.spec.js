@@ -15,6 +15,7 @@
  */
 const retrieve = require('../actions/retrieve.js').main;
 const assert = require('chai').assert;
+const nock = require('nock');
 
 describe('Retrieve', () => {
   it('returns existing recommendations', (done) => {
@@ -22,16 +23,50 @@ describe('Retrieve', () => {
     // prepare to catch calls to whisk to capture the results and validate
     global.whisk = {
       done: function(result, err) {
-        assert.equal('MyGUID', result.demoGuid);
-        assert.equal(0, result.recommendations.length);
+        assert.equal(2, result.recommendations.length);
+        assert.equal(0, result.recommendations[0]._id);
+        assert.equal(1, result.recommendations[1]._id);
+        assert.equal(10, result.recommendations[0].fromId);
+        assert.equal(40, result.recommendations[1].toId);
         done(null);
+      },
+      async: function() {
       }
     };
 
+    nock('http://cloudant')
+      .post('/recommendations')
+      .reply(200, '{"ok":true}')
+      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+      .reply(200, {
+        rows: [
+          {
+            doc: {
+              _id: 0,
+              _rev: 0,
+              recommendation: {
+                fromId: 10,
+                toId: 20
+              }
+            }
+          },
+          {
+            doc: {
+              _id: 1,
+              _rev: 0,
+              recommendation: {
+                fromId: 30,
+                toId: 40
+              }
+            }
+          }
+        ]
+      });
+
     retrieve({
       demoGuid: 'MyGUID',
+      'services.cloudant.url': 'http://cloudant',
+      'services.cloudant.database': 'recommendations'
     });
-
   });
-
 });

@@ -33,6 +33,13 @@ cf create-service-key logistics-wizard-weatherinsights for-openwhisk
 # retrieve the URL - it contains credentials + API URL
 export WEATHER_SERVICE=`cf service-key logistics-wizard-weatherinsights for-openwhisk | grep \"url\" | awk -F '"' '{print $4}'`
 
+# create a Cloudant service
+cf create-service cloudantNoSQLDB Lite logistics-wizard-recommendation-db
+# create a key for this service
+cf create-service-key logistics-wizard-recommendation-db for-openwhisk
+# retrieve the URL - it contains credentials + API URL
+export CLOUDANT_URL=`cf service-key logistics-wizard-recommendation-db for-openwhisk | grep \"url\" | awk -F '"' '{print $4}'`
+
 # Deploy the OpenWhisk triggers/actions/rules
 ./deploy.sh --uninstall
 ./deploy.sh --install

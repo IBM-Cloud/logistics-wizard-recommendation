@@ -32,10 +32,19 @@ function usage() {
 }
 
 function install() {
+
+  echo "Creating database..."
+  curl -X PUT $CLOUDANT_URL/$CLOUDANT_DATABASE
+
+  echo "Inserting database design documents..."
+  curl -X POST -H 'Content-Type: application/json' -d @database-designs.json $CLOUDANT_URL/$CLOUDANT_DATABASE/_bulk_docs
+
   echo "Creating $PACKAGE_NAME package"
   wsk package create $PACKAGE_NAME\
     -p services.controller.url $CONTROLLER_SERVICE\
-    -p services.weather.url $WEATHER_SERVICE
+    -p services.weather.url $WEATHER_SERVICE\
+    -p services.cloudant.url $CLOUDANT_URL\
+    -p services.cloudant.database $CLOUDANT_DATABASE
 
   echo "Creating actions"
   wsk action create $PACKAGE_NAME/recommend\
@@ -78,6 +87,8 @@ function showenv() {
   echo "PACKAGE_NAME=$PACKAGE_NAME"
   echo "CONTROLLER_SERVICE=$CONTROLLER_SERVICE"
   echo "WEATHER_SERVICE=$WEATHER_SERVICE"
+  echo "CLOUDANT_URL=$CLOUDANT_URL"
+  echo "CLOUDANT_DATABASE=$CLOUDANT_DATABASE"
 }
 
 case "$1" in
