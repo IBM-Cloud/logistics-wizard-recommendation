@@ -32,6 +32,13 @@ function usage() {
 }
 
 function install() {
+
+  echo "Creating database..."
+  curl -X PUT $CLOUDANT_URL/$CLOUDANT_DATABASE
+
+  echo "Inserting database design documents..."
+  curl -X POST -H 'Content-Type: application/json' -d @database-designs.json $CLOUDANT_URL/$CLOUDANT_DATABASE/_bulk_docs
+
   echo "Creating $PACKAGE_NAME package"
   wsk package create $PACKAGE_NAME\
     -p services.controller.url $CONTROLLER_SERVICE\

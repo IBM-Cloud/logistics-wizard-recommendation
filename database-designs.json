@@ -1,0 +1,13 @@
+{
+  "docs": [
+    {
+      "_id": "_design/recommendations",
+      "indexes": {
+        "byGuid": {
+          "analyzer": { "name": "standard" },
+          "index": "function(doc) { if (doc.guid && doc.recommendation) { index('guid', doc.guid); } }"
+        }
+      }
+    }
+  ]
+}
