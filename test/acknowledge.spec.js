@@ -18,16 +18,20 @@ const assert = require('chai').assert;
 const nock = require('nock');
 
 describe('Acknowledge', () => {
-  it('acknowledges recommendations', (done) => {
+  it('acknowledges a recommendation', (done) => {
     // intercept the cloudant delete
     nock('http://cloudant')
+      .get('/recommendations/myRecommendationId')
+      .reply(200, {
+        _id: 'myRecommendationId',
+        _rev: 12
+      })
       .delete('/recommendations/myRecommendationId?rev=12')
       .reply(200, { ok: true });
 
     acknowledge({
       demoGuid: 'MyGUID',
       recommendationId: 'myRecommendationId',
-      recommendationRev: '12',
       'services.cloudant.url': 'http://cloudant',
       'services.cloudant.database': 'recommendations'
     }).then(result => {
@@ -39,6 +43,11 @@ describe('Acknowledge', () => {
   it('handles failures of Cloudant', (done) => {
     // intercept the cloudant delete and fail
     nock('http://cloudant')
+      .get('/recommendations/myRecommendationId')
+      .reply(200, {
+        _id: 'myRecommendationId',
+        _rev: 12
+      })
       .delete('/recommendations/myRecommendationId?rev=12')
       .reply(500);
 

@@ -25,7 +25,6 @@ const Cloudant = require('cloudant');
  * @param {Object} args Expected arguments:
  * <li> {string} demoGuid - the demo environment to use
  * <li> {string} recommendationId - the recommendation ID to acknowledge
- * <li> {string} recommendationRev - the recommendation Rev to acknowledge
  * <li> {string} services.cloudant.url - URL to the Cloudant service
  * <li> {string} services.cloudant.database - Database where recommendations are stored
  * @returns {Object}
@@ -41,7 +40,6 @@ function main(args) {
       args['services.cloudant.database'],
       args.demoGuid,
       args.recommendationId,
-      args.recommendationRev,
       (err) => {
         if (err) {
           console.log('[KO]', err);
@@ -61,10 +59,11 @@ exports.main = global.main = main;
  * <li> {string} cloudantUrl - URL to the Cloudant service
  * <li> {string} cloudantDatabase - Database where recommendations are stored
  * <li> {string} demoGuid
+ * <li> {string} recommendationId - the recommendation ID to acknowledge
  * <li> callback - err, recommendations
  */
 function acknowledge(cloudantUrl, cloudantDatabase,
-  demoGuid, recommendationId, recommendationRev, callback) {
+  demoGuid, recommendationId, callback) {
   console.log('Deleting recommendation...');
   const cloudant = Cloudant({
     url: cloudantUrl,
@@ -74,11 +73,17 @@ function acknowledge(cloudantUrl, cloudantDatabase,
   });
 
   const db = cloudant.db.use(cloudantDatabase);
-  db.destroy(recommendationId, recommendationRev, (err) => {
-    if (err) {
-      callback(err);
+  db.get(recommendationId, (getErr, doc) => {
+    if (getErr) {
+      callback(getErr);
     } else {
-      callback(null);
+      db.destroy(recommendationId, doc._rev, (destroyErr) => {
+        if (destroyErr) {
+          callback(destroyErr);
+        } else {
+          callback(null);
+        }
+      });
     }
   });
 }
