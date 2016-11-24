@@ -193,7 +193,6 @@ function persist(cloudantUrl, cloudantDatabase, demoGuid, recommendations, callb
         // inject the cloudant IDs into the recommendations
         result.forEach((doc, index) => {
           recommendations[index]._id = doc.id;
-          recommendations[index]._rev = doc.rev;
         });
         callback(null, recommendations);
       }

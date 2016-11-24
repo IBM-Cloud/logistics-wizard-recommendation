@@ -86,7 +86,7 @@ describe('Recommend', () => {
       .post('/recommendations/_bulk_docs?include_docs=true')
       .reply(200, (uri, requestBody) => {
         return requestBody.docs.map((row, index) => ({
-          'id': index,
+          'id': (index+1)*100,
           'rev': 0
         }));
       });
@@ -104,6 +104,7 @@ describe('Recommend', () => {
     }).then(result => {
       assert.equal('MyGUID', result.demoGuid);
       assert.equal(1, result.recommendations.length);
+      assert.equal(100, result.recommendations[0]._id);
       done(null);
     });
   });

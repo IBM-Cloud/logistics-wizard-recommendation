@@ -78,7 +78,6 @@ function retrieve(cloudantUrl, cloudantDatabase, demoGuid, callback) {
           // to make it look like what we returned in recommend.js
           const recommendation = row.doc.recommendation;
           recommendation._id = row.doc._id;
-          recommendation._rev = row.doc._rev;
           return recommendation;
         }));
       }
