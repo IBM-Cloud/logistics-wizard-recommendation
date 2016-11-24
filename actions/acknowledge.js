@@ -17,22 +17,69 @@
 /**
  * @module acknowledge
  */
+const Cloudant = require('cloudant');
 
 /**
  * OpenWhisk entry point.
  *
  * @param {Object} args Expected arguments:
  * <li> {string} demoGuid - the demo environment to use
- * <li> {string} recommendationId - the recommendation to acknowledge
+ * <li> {string} recommendationId - the recommendation ID to acknowledge
+ * <li> {string} recommendationRev - the recommendation Rev to acknowledge
+ * <li> {string} services.cloudant.url - URL to the Cloudant service
+ * <li> {string} services.cloudant.database - Database where recommendations are stored
  * @returns {Object}
- * <li> {string} demoGuid
+ * <li> {boolean} "ok"
  */
 function main(args) {
-  console.log('Acknowledge recommendation for demo', args.demoGuid,
+  console.log('Acknowledge for demo', args.demoGuid,
     'and recommendation', args.recommendationId);
 
-  whisk.done({
-    recommendationId: args.recommendationId
+  return new Promise((resolve, reject) => {
+    acknowledge(
+      args['services.cloudant.url'],
+      args['services.cloudant.database'],
+      args.demoGuid,
+      args.recommendationId,
+      args.recommendationRev,
+      (err) => {
+        if (err) {
+          console.log('[KO]', err);
+          reject({ ok: false });
+        } else {
+          console.log('[OK] Recommendation', args.recommendationId, 'acknowledged');
+          resolve({ ok: true });
+        }
+      }
+    );
   });
 }
 exports.main = global.main = main;
+
+/**
+ * Retrieves recommendations linked to a given demo
+ * <li> {string} cloudantUrl - URL to the Cloudant service
+ * <li> {string} cloudantDatabase - Database where recommendations are stored
+ * <li> {string} demoGuid
+ * <li> callback - err, recommendations
+ */
+function acknowledge(cloudantUrl, cloudantDatabase,
+  demoGuid, recommendationId, recommendationRev, callback) {
+  console.log('Deleting recommendation...');
+  const cloudant = Cloudant({
+    url: cloudantUrl,
+    plugin: 'retry',
+    retryAttempts: 5,
+    retryTimeout: 500
+  });
+
+  const db = cloudant.db.use(cloudantDatabase);
+  db.destroy(recommendationId, recommendationRev, (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null);
+    }
+  });
+}
+exports.acknowledge = acknowledge;
