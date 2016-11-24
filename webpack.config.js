@@ -32,15 +32,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.json$/, loader: 'json-loader' },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015'],
-        },
-      },
+      { test: /\.json$/, loader: 'json-loader' }
     ],
   },
   target: 'node',
