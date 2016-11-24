@@ -34,10 +34,12 @@ function usage() {
 function install() {
 
   echo "Creating database..."
-  curl -X PUT $CLOUDANT_URL/$CLOUDANT_DATABASE
+  # ignore "database already exists error"
+  curl -s -X PUT $CLOUDANT_URL/$CLOUDANT_DATABASE | grep -v file_exists
 
   echo "Inserting database design documents..."
-  curl -X POST -H 'Content-Type: application/json' -d @database-designs.json $CLOUDANT_URL/$CLOUDANT_DATABASE/_bulk_docs
+  # ignore "document already exists error"
+  curl -s -X POST -H 'Content-Type: application/json' -d @database-designs.json $CLOUDANT_URL/$CLOUDANT_DATABASE/_bulk_docs | grep -v conflict
 
   echo "Creating $PACKAGE_NAME package"
   wsk package create $PACKAGE_NAME\
