@@ -191,7 +191,7 @@ function persist(cloudantUrl, cloudantDatabase, demoGuid, recommendations, callb
         callback(bulkErr);
       } else {
         // inject the cloudant IDs into the recommendations
-        result.map((doc, index) => {
+        result.forEach((doc, index) => {
           recommendations[index]._id = doc.id;
           recommendations[index]._rev = doc.rev;
         });

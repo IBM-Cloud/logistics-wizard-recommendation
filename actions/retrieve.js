@@ -37,13 +37,13 @@ function main(args) {
       args['services.cloudant.url'],
       args['services.cloudant.database'],
       args.demoGuid,
-      (err, recommendations) => {
+      (err, result) => {
         if (err) {
           console.log('[KO]', err);
           reject({ ok: false });
         } else {
-          console.log('[OK] Got', recommendations.length, 'recommendations');
-          resolve({ recommendations: recommendations });
+          console.log('[OK] Got', result.length, 'recommendations');
+          resolve({ recommendations: result });
         }
       }
     );
