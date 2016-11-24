@@ -1,10 +1,8 @@
 {
-  "parser"  : "babel-eslint",
   "extends" : [
     "airbnb",
   ],
   "plugins": [
-    "babel",
     "react",
     "promise"
   ],
@@ -28,7 +26,6 @@
     "import/no-extraneous-dependencies": [0],
     "import/no-named-as-default": [0],
     "generator-star-spacing": [0],
-    "babel/generator-star-spacing": [2, {"before": true, "after": false}],
     "no-constant-condition": [2, {"checkLoops": false}],
     "react/jsx-filename-extension": [0],
     "func-names": [0],

@@ -15,12 +15,10 @@
     "geopoint": "1.0.1"
   },
   "devDependencies": {
-    "babel-eslint": "^7.1.0",
     "chai": "^3.5.0",
     "coveralls": "^2.11.15",
     "eslint": "^3.9.1",
     "eslint-config-airbnb": "^13.0.0",
-    "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-promise": "^3.3.2",
