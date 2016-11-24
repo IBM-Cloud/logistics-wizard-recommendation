@@ -32,22 +32,22 @@ const Cloudant = require('cloudant');
 function main(args) {
   console.log('Retrieve recommendations for demo', args.demoGuid);
 
-  retrieve(
-    args['services.cloudant.url'],
-    args['services.cloudant.database'],
-    args.demoGuid,
-    (err, recommendations) => {
-      if (err) {
-        console.log('[KO]', err);
-        whisk.done(null, err);
-      } else {
-        console.log('[OK] Got', recommendations.length, 'recommendations');
-        whisk.done({ recommendations: recommendations });
+  return new Promise((resolve, reject) => {
+    retrieve(
+      args['services.cloudant.url'],
+      args['services.cloudant.database'],
+      args.demoGuid,
+      (err, recommendations) => {
+        if (err) {
+          console.log('[KO]', err);
+          reject({ ok: false });
+        } else {
+          console.log('[OK] Got', recommendations.length, 'recommendations');
+          resolve({ recommendations: recommendations });
+        }
       }
-    }
-  );
-
-  return whisk.async();
+    );
+  });
 }
 exports.main = global.main = main;
 

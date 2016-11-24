@@ -41,45 +41,45 @@ function main(args) {
     'at latitude', args.event.lat,
     'and longitude', args.event.lon);
 
-  async.waterfall([
-    // retrieve list of retailers
-    function(callback) {
-      getRetailers(args['services.controller.url'],
-        args.demoGuid, callback);
-    },
-    // identify retailers affected by the weather event
-    function(retailers, callback) {
-      console.log('args.event: ....', args.event);
-      filterRetailers(retailers, args.event, callback);
-    },
-    // retrieve their stock and make new shipments
-    function(retailers, callback) {
-      recommend(retailers, callback);
-    },
-    // persist the recommendations
-    function(recommendations, callback) {
-      persist(
-        args['services.cloudant.url'],
-        args['services.cloudant.database'],
-        args.demoGuid,
-        recommendations,
-        callback);
-    }
-  ], (err, result) => {
-    if (err) {
-      console.log('[KO]', err);
-      whisk.done(null, err);
-    } else {
-      console.log('[OK] Got', result.length, 'recommendations');
-      whisk.done({
-        demoGuid: args.demoGuid,
-        event: args.event,
-        recommendations: result,
-      });
-    }
+  return new Promise((resolve, reject) => {
+    async.waterfall([
+      // retrieve list of retailers
+      function(callback) {
+        getRetailers(args['services.controller.url'],
+          args.demoGuid, callback);
+      },
+      // identify retailers affected by the weather event
+      function(retailers, callback) {
+        console.log('args.event: ....', args.event);
+        filterRetailers(retailers, args.event, callback);
+      },
+      // retrieve their stock and make new shipments
+      function(retailers, callback) {
+        recommend(retailers, callback);
+      },
+      // persist the recommendations
+      function(recommendations, callback) {
+        persist(
+          args['services.cloudant.url'],
+          args['services.cloudant.database'],
+          args.demoGuid,
+          recommendations,
+          callback);
+      }
+    ], (err, result) => {
+      if (err) {
+        console.log('[KO]', err);
+        reject({ ok: false });
+      } else {
+        console.log('[OK] Got', result.length, 'recommendations');
+        resolve({
+          demoGuid: args.demoGuid,
+          event: args.event,
+          recommendations: result,
+        });
+      }
+    });
   });
-
-  return whisk.async();
 }
 exports.main = global.main = main;
 

@@ -19,21 +19,6 @@ const nock = require('nock');
 
 describe('Observations', () => {
   it('tell the weather', (done) => {
-
-    // prepare to catch calls to whisk to capture the results and validate
-    global.whisk = {
-      done: function(result, err) {
-        assert.equal(result.observation.weather, 'good');
-        assert.equal(result.forecasts.length, 1);
-        assert.equal(result.forecasts[0].forecast, 'good');
-        assert.equal(result.alerts.length, 1);
-        assert.equal(result.alerts[0].alert, 'none');
-        done(null);
-      },
-      async: function() {
-      }
-    };
-
     // mock the call to the Weather service
     nock('http://theweatherservice')
       .get(/observations.json/)
@@ -47,6 +32,13 @@ describe('Observations', () => {
       'services.weather.url': 'http://theweatherservice',
       latitude: 38.89,
       longitude: -77.03
+    }).then(result => {
+      assert.equal(result.observation.weather, 'good');
+      assert.equal(result.forecasts.length, 1);
+      assert.equal(result.forecasts[0].forecast, 'good');
+      assert.equal(result.alerts.length, 1);
+      assert.equal(result.alerts[0].alert, 'none');
+      done(null);
     });
   });
 

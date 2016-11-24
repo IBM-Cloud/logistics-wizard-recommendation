@@ -19,21 +19,6 @@ const nock = require('nock');
 
 describe('Retrieve', () => {
   it('returns existing recommendations', (done) => {
-
-    // prepare to catch calls to whisk to capture the results and validate
-    global.whisk = {
-      done: function(result, err) {
-        assert.equal(2, result.recommendations.length);
-        assert.equal(0, result.recommendations[0]._id);
-        assert.equal(1, result.recommendations[1]._id);
-        assert.equal(10, result.recommendations[0].fromId);
-        assert.equal(40, result.recommendations[1].toId);
-        done(null);
-      },
-      async: function() {
-      }
-    };
-
     nock('http://cloudant')
       .post('/recommendations')
       .reply(200, '{"ok":true}')
@@ -67,6 +52,13 @@ describe('Retrieve', () => {
       demoGuid: 'MyGUID',
       'services.cloudant.url': 'http://cloudant',
       'services.cloudant.database': 'recommendations'
-    });
+    }).then(result => {
+      assert.equal(2, result.recommendations.length);
+      assert.equal(0, result.recommendations[0]._id);
+      assert.equal(1, result.recommendations[1]._id);
+      assert.equal(10, result.recommendations[0].fromId);
+      assert.equal(40, result.recommendations[1].toId);
+      done(null);
+    })
   });
 });

@@ -34,60 +34,75 @@ const async = require('async');
 function main(args) {
   console.log('Get weather for', args.latitude, args.longitude);
 
-  const observations = {
+  return new Promise((resolve, reject) => {
+    observations(
+      args['services.weather.url'],
+      args.latitude,
+      args.longitude,
+      (err, result) => {
+        if (err) {
+          console.log('[KO]', err);
+          reject({ ok: false });
+        } else {
+          console.log('[OK] Got weather');
+          resolve(result);
+        }
+      }
+    );
+  });
+}
+exports.main = global.main = main;
+
+function observations(weatherUrl, latitude, longitude, observeCallback) {
+  const result = {
     observation: {},
     forecasts: [],
     alerts: []
   };
 
-  const weather = require('./weather.js')(args['services.weather.url']);
+  const weather = require('./weather.js')(weatherUrl);
   async.parallel([
     // get current weather
     function(callback) {
-      weather.currentByGeolocation(args.latitude, args.longitude, {}, (err, response) => {
+      weather.currentByGeolocation(latitude, longitude, {}, (err, response) => {
         if (err) {
           callback(err);
         } else {
           console.log('Retrieved current observation');
-          observations.observation = response.observation;
+          result.observation = response.observation;
           callback(null);
         }
       });
     },
     // get 10-day forecasts
     function(callback) {
-      weather.tendayByGeolocation(args.latitude, args.longitude, {}, (err, response) => {
+      weather.tendayByGeolocation(latitude, longitude, {}, (err, response) => {
         if (err) {
           callback(err);
         } else {
           console.log('Retrieved forecasts');
-          observations.forecasts = response.forecasts;
+          result.forecasts = response.forecasts;
           callback(null);
         }
       });
     },
     // get alerts
     function(callback) {
-      weather.alertsByGeolocation(args.latitude, args.longitude, {}, (err, response) => {
+      weather.alertsByGeolocation(latitude, longitude, {}, (err, response) => {
         if (err) {
           callback(err);
         } else {
           console.log('Retrieved alerts');
-          observations.alerts = response.alerts;
+          result.alerts = response.alerts;
           callback(null);
         }
       });
     }
-  ], (err, result) => {
+  ], (err) => {
     if (err) {
-      console.log('[KO]', err);
-      whisk.done(null, err);
+      observeCallback(err);
     } else {
-      console.log('[OK] Got weather');
-      whisk.done(observations);
+      observeCallback(null, result);
     }
   });
-
-  return whisk.async();
 }
-exports.main = global.main = main;

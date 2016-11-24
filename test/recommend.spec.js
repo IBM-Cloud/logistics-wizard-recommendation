@@ -54,17 +54,6 @@ describe('Recommend', () => {
   });
 
   it('can fail during recommend', (done) => {
-    // prepare to catch calls to whisk to capture the results and validate
-    global.whisk = {
-      done: function(result, err) {
-        assert(err != null);
-        done(null);
-      },
-      async: function() {
-        // do nothing, whisk.done should get called
-      }
-    };
-
     // intercept the call to retrieve retailers
     nock('http://fail')
       .get('/api/v1/demos/MyGUID/retailers')
@@ -78,22 +67,13 @@ describe('Recommend', () => {
         "lon": -77.03
       },
       "services.controller.url": 'http://fail'
+    }).catch(err => {
+      assert(err != null);
+      done(null);
     });
   });
 
   it('does recommendations', (done) => {
-    // prepare to catch calls to whisk to capture the results and validate
-    global.whisk = {
-      done: function(result, err) {
-        assert.equal('MyGUID', result.demoGuid);
-        assert.equal(1, result.recommendations.length);
-        done(null);
-      },
-      async: function() {
-        // do nothing, whisk.done should get called
-      }
-    };
-
     // intercept the call to retrieve retailers
     nock('http://intercept')
       .get('/api/v1/demos/MyGUID/retailers')
@@ -121,6 +101,10 @@ describe('Recommend', () => {
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',
       'services.cloudant.database': 'recommendations'
+    }).then(result => {
+      assert.equal('MyGUID', result.demoGuid);
+      assert.equal(1, result.recommendations.length);
+      done(null);
     });
   });
 
