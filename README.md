@@ -32,6 +32,7 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
     rankdir=TB
     weather -> recommend
     recommend -> database
+    database -> notify
     ui -> retrieve
     ui -> observations
     retrieve -> database
@@ -39,10 +40,11 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
     acknowledge -> database
     recommend -> erp
     ui -> erp
-    {rank=same; recommend -> retrieve -> retrieve [style=invis] }
+    {rank=same; recommend -> notify -> retrieve -> retrieve [style=invis] }
     {rank=source; weather -> erp -> ui [style=invis]}
     weather [shape=rect label="Weather Company\\nData service" style=filled color="%234E96DB" fontcolor=white]
     recommend [label="Recommend" color="%232e8c70" style=filled fontcolor=white]
+    notify [label="Notify" color="%232e8c70" style=filled fontcolor=white]
     retrieve [label="Retrieve" color="%232e8c70" style=filled fontcolor=white]
     acknowledge [label="Acknowledge" color="%232e8c70" style=filled fontcolor=white]
     observations [label="Observations" color="%232e8c70" style=filled fontcolor=white]
@@ -106,6 +108,7 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
 |[**package.json**](package.json)|List dependencies used by the actions and the build process.|
 |[**webpack.config.js**](webpack.config.js)|Webpack configuration used to build OpenWhisk actions. This allows the actions to use modules (module versions) not packaged natively by OpenWhisk. Make sure to add explicit dependencies in the package.json for specific module versions used by the actions. The webpack build will look at the "dependencies" and *webpack* them. If a module is not listen in "dependencies" it is assumed to be provided by OpenWhisk.|
 |[**recommend.js**](actions/recommend.js)|Entry point for the Recommend action.|
+|[**prepare-for-slack.js**](actions/prepare-for-slack.js)|Entry point for the Notify action. It formats newly added recommendations into a text suitable for a Slack post message.|
 |[**retrieve.js**](actions/retrieve.js)|Entry point for the Retrieve action.|
 |[**acknowledge.js**](actions/acknowledge.js)|Entry point for the Acknowledge action.|
 |[**observations.js**](actions/observations.js)|Entry point for the Observations action.|
