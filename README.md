@@ -60,6 +60,42 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
 
 1. The recommendation service depends on the [Controller](https://github.com/IBM-Bluemix/logistics-wizard-controller) and [ERP](https://github.com/IBM-Bluemix/logistics-wizard-erp) microservices. Make sure to deploy them first.
 
+1. In Bluemix, create an instance of the Weather Company Data service
+
+  ```
+  cf create-service weatherinsights Free-v2 logistics-wizard-weatherinsights
+  ```
+
+1. Create a set of credentials for this service
+
+  ```
+  cf create-service-key logistics-wizard-weatherinsights for-openwhisk
+  ```
+
+1. View the credentials and take note of the `url` value
+
+  ```
+  cf service-key logistics-wizard-weatherinsights for-openwhisk
+  ```
+
+1. Create an instance of Cloudant to store the recommendations
+
+  ```
+  cf create-service cloudantNoSQLDB Lite logistics-wizard-recommendation-db
+  ```
+
+1. Create a set of credentials for this service
+
+  ```
+  cf create-service-key logistics-wizard-recommendation-db for-openwhisk
+  ```
+
+1. View the credentials and take note of the `url` value
+
+  ```
+  cf service-key logistics-wizard-recommendation-db for-openwhisk
+  ```
+
 1. Clone the app to your local environment from your terminal using the following command:
 
   ```
@@ -74,7 +110,7 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
   cp template-local.env local.env
   ```
 
-1. In local.env, update the location of the CONTROLLER_SERVICE
+1. In local.env, update the location of the CONTROLLER_SERVICE, the url of the Weather Company Data service, the url of the Cloudant database.
 
 1. Get the dependencies, and use [webpack module bundler](https://webpack.github.io/) to create our final .js actions in the `dist` folder.
 
