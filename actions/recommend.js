@@ -182,21 +182,19 @@ function persist(cloudantUrl, cloudantDatabase, demoGuid, recommendations, callb
     retryTimeout: 500
   });
 
-  cloudant.db.create(cloudantDatabase, () => {
-    const records = recommendations.map(reco => ({
-      guid: demoGuid, recommendation: reco }));
-    const db = cloudant.use(cloudantDatabase);
-    db.bulk({ docs: records }, { include_docs: true }, (bulkErr, result) => {
-      if (bulkErr) {
-        callback(bulkErr);
-      } else {
-        // inject the cloudant IDs into the recommendations
-        result.forEach((doc, index) => {
-          recommendations[index]._id = doc.id;
-        });
-        callback(null, recommendations);
-      }
-    });
+  const records = recommendations.map(reco => ({
+    guid: demoGuid, recommendation: reco }));
+  const db = cloudant.use(cloudantDatabase);
+  db.bulk({ docs: records }, { include_docs: true }, (bulkErr, result) => {
+    if (bulkErr) {
+      callback(bulkErr);
+    } else {
+      // inject the cloudant IDs into the recommendations
+      result.forEach((doc, index) => {
+        recommendations[index]._id = doc.id;
+      });
+      callback(null, recommendations);
+    }
   });
 }
 exports.persist = persist;
