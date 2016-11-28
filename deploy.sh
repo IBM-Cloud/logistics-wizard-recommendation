@@ -61,6 +61,9 @@ function install() {
   wsk action create $PACKAGE_NAME/observations\
     -a description 'Return weather observations for a location'\
     dist/observations.bundle.js
+  wsk action create $PACKAGE_NAME/prepare-for-slack\
+    -a description 'Transform a recommendation into a Slack message'\
+    actions/prepare-for-slack.js
 }
 
 function uninstall() {
@@ -69,6 +72,7 @@ function uninstall() {
   wsk action delete $PACKAGE_NAME/retrieve
   wsk action delete $PACKAGE_NAME/acknowledge
   wsk action delete $PACKAGE_NAME/observations
+  wsk action delete $PACKAGE_NAME/prepare-for-slack
 
   echo "Removing package..."
   wsk package delete $PACKAGE_NAME
@@ -79,10 +83,11 @@ function uninstall() {
 
 function update() {
   echo "Updating actions..."
-  wsk action update $PACKAGE_NAME/recommend    dist/recommend.bundle.js
-  wsk action update $PACKAGE_NAME/retrieve     dist/retrieve.bundle.js
-  wsk action update $PACKAGE_NAME/acknowledge  dist/acknowledge.bundle.js
-  wsk action update $PACKAGE_NAME/observations dist/observations.bundle.js
+  wsk action update $PACKAGE_NAME/recommend         dist/recommend.bundle.js
+  wsk action update $PACKAGE_NAME/retrieve          dist/retrieve.bundle.js
+  wsk action update $PACKAGE_NAME/acknowledge       dist/acknowledge.bundle.js
+  wsk action update $PACKAGE_NAME/observations      dist/observations.bundle.js
+  wsk action update $PACKAGE_NAME/prepare-for-slack actions/prepare-for-slack.js
 }
 
 function showenv() {
