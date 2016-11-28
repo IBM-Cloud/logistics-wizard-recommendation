@@ -4,8 +4,6 @@
 | ----- | ----- |
 | **dev** | [![Build Status](https://travis-ci.org/IBM-Bluemix/logistics-wizard-recommendation.svg?branch=dev)](https://travis-ci.org/IBM-Bluemix/logistics-wizard-recommendation) [![Coverage Status](https://coveralls.io/repos/github/IBM-Bluemix/logistics-wizard-recommendation/badge.svg?branch=dev)](https://coveralls.io/github/IBM-Bluemix/logistics-wizard-recommendation?branch=dev)|
 
-**WORK IN PROGRESS**
-
 This service is part of the larger [Logistics Wizard](https://github.com/IBM-Bluemix/logistics-wizard) project.
 
 ## Overview
