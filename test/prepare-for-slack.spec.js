@@ -44,6 +44,50 @@ describe('Prepare For Slack', () => {
     });
   });
 
+  it('ignores non-recommendations', (done) => {
+    nock('http://cloudant')
+      .get('/recommendations/123')
+      .reply(200, {
+        somethingelse: {
+          text: 'with some text'
+        }
+      });
+
+    prepareForSlack({
+      id: '123',
+      changes: [
+        {
+          rev: '1-123456'
+        }
+      ],
+      'services.cloudant.url': 'http://cloudant',
+      'services.cloudant.database': 'recommendations'
+    }).catch((result) => {
+      assert(result.error, 'an error should have been detected');
+      done(null);
+    });
+  });
+
+  it('handles Cloudant errors', (done) => {
+    nock('http://cloudant')
+      .get('/recommendations/123')
+      .reply(500);
+
+    prepareForSlack({
+      id: '123',
+      changes: [
+        {
+          rev: '1-123456'
+        }
+      ],
+      'services.cloudant.url': 'http://cloudant',
+      'services.cloudant.database': 'recommendations'
+    }).catch((result) => {
+      assert(result.error, 'an error should have been detected');
+      done(null);
+    });
+  });
+
   it('ignores subsequent updates', (done) => {
     const result = prepareForSlack({
       id: '123',

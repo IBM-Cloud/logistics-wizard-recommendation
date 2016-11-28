@@ -41,4 +41,24 @@ describe('Observations', () => {
       done(null);
     });
   });
+
+  it('handles weather service failures', (done) => {
+    // mock the call to the Weather service
+    nock('http://theweatherservice')
+      .get(/observations.json/)
+      .reply(500)
+      .get(/10day.json/)
+      .reply(500)
+      .get(/alerts.json/)
+      .reply(500);
+
+    observations.main({
+      'services.weather.url': 'http://theweatherservice',
+      latitude: 38.89,
+      longitude: -77.03
+    }).catch((result) => {
+      assert.equal(false, result.ok);
+      done(null);
+    });
+  });
 });

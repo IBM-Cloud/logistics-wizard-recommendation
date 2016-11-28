@@ -41,7 +41,11 @@ function Weather(url) {
         json: true
       },
       (error, response, body) => {
-        callback(error, body);
+        if (response.statusCode !== 200) {
+          callback({ ok: false, statusCode: response.statusCode });
+        } else {
+          callback(error, body);
+        }
       });
   };
 

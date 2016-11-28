@@ -91,15 +91,12 @@ function getRetailers(controllerUrl, demoGuid, callback) {
   const retailerUrl = `${controllerUrl}/api/v1/demos/${demoGuid}/retailers`;
   console.log(`Retrieving retailers... ${retailerUrl}`);
   request.get({ url: retailerUrl, json: true }, (error, response, body) => {
-    if (error) {
-      console.log('getRetailers ERROR', error);
-      callback(error);
-    } else if (response.statusCode === 200) {
+    if (response.statusCode === 200) {
       const retailLocations = body;
       console.log(`Got ${retailLocations.length} retailLocations.`);
       callback(null, retailLocations);
     } else {
-      console.log('getRetailers ERROR', response.statusCode);
+      console.log('getRetailers ERROR', error, response.statusCode);
       callback({ error: response.statusCode });
     }
   });

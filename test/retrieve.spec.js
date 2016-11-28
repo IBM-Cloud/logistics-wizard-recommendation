@@ -20,8 +20,6 @@ const nock = require('nock');
 describe('Retrieve', () => {
   it('returns existing recommendations', (done) => {
     nock('http://cloudant')
-      .post('/recommendations')
-      .reply(200, '{"ok":true}')
       .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
       .reply(200, {
         rows: [
@@ -58,6 +56,21 @@ describe('Retrieve', () => {
       assert.equal(1, result.recommendations[1]._id);
       assert.equal(10, result.recommendations[0].fromId);
       assert.equal(40, result.recommendations[1].toId);
+      done(null);
+    });
+  });
+
+  it('handles Cloudant errors', (done) => {
+    nock('http://cloudant')
+      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+      .reply(500);
+
+    retrieve({
+      demoGuid: 'MyGUID',
+      'services.cloudant.url': 'http://cloudant',
+      'services.cloudant.database': 'recommendations'
+    }).catch((result) => {
+      assert.equal(false, result.ok, 'an error should have been detected');
       done(null);
     });
   });
