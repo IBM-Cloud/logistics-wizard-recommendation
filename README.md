@@ -139,7 +139,7 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
 
 | File | Description |
 | ---- | ----------- |
-|[**deploy.sh**](deploy.sh)|Helper script to install, uninstall, update the OpenWhisk trigger, actions, rules.|
+|[**deploy.sh**](deploy.sh)|Helper script to create the recommendations database, install, uninstall, update the OpenWhisk trigger, actions, rules.|
 |[**template-local.env**](template-local.env)|Contains environment variables used by the deployment script. Duplicate this file into `local.env` to customize it for your environment.|
 |[**package.json**](package.json)|List dependencies used by the actions and the build process.|
 |[**webpack.config.js**](webpack.config.js)|Webpack configuration used to build OpenWhisk actions. This allows the actions to use modules (module versions) not packaged natively by OpenWhisk. Make sure to add explicit dependencies in the package.json for specific module versions used by the actions. The webpack build will look at the "dependencies" and *webpack* them. If a module is not listen in "dependencies" it is assumed to be provided by OpenWhisk.|
