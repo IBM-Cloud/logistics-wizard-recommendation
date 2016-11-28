@@ -19,6 +19,8 @@
  */
 const Cloudant = require('cloudant');
 
+const self = exports;
+
 /**
  * OpenWhisk entry point.
  *
@@ -33,7 +35,7 @@ function main(args) {
   console.log('Retrieve recommendations for demo', args.demoGuid);
 
   return new Promise((resolve, reject) => {
-    retrieve(
+    self.retrieve(
       args['services.cloudant.url'],
       args['services.cloudant.database'],
       args.demoGuid,

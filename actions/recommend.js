@@ -22,6 +22,8 @@ const request = require('request');
 const GeoPoint = require('geopoint');
 const Cloudant = require('cloudant');
 
+const self = exports;
+
 /**
  * OpenWhisk entry point.
  *
@@ -45,21 +47,21 @@ function main(args) {
     async.waterfall([
       // retrieve list of retailers
       function(callback) {
-        getRetailers(args['services.controller.url'],
+        self.getRetailers(args['services.controller.url'],
           args.demoGuid, callback);
       },
       // identify retailers affected by the weather event
       function(retailers, callback) {
         console.log('args.event: ....', args.event);
-        filterRetailers(retailers, args.event, callback);
+        self.filterRetailers(retailers, args.event, callback);
       },
       // retrieve their stock and make new shipments
       function(retailers, callback) {
-        recommend(retailers, callback);
+        self.recommend(retailers, callback);
       },
       // persist the recommendations
       function(recommendations, callback) {
-        persist(
+        self.persist(
           args['services.cloudant.url'],
           args['services.cloudant.database'],
           args.demoGuid,

@@ -19,6 +19,8 @@
  */
 const Cloudant = require('cloudant');
 
+const self = exports;
+
 /**
  * Receives Cloudant change events and generates a message suitable for Slack
  *
@@ -33,7 +35,7 @@ function main(doc) {
   if (!doc.deleted && doc.changes[0].rev.startsWith('1-')) {
     // get the document from the db
     return new Promise((resolve, reject) => {
-      makeMessage(
+      self.makeMessage(
         doc['services.cloudant.url'],
         doc['services.cloudant.database'],
         doc.id, (err, result) => {
@@ -78,3 +80,4 @@ function makeMessage(cloudantUrl, cloudantDatabase, recommendationId, callback) 
     }
   });
 }
+exports.makeMessage = makeMessage;
