@@ -18,21 +18,21 @@ const assert = require('chai').assert;
 const nock = require('nock');
 
 describe('Observations', () => {
-  it('tell the weather', (done) => {
+  it('tells the weather', (done) => {
     // mock the call to the Weather service
     nock('http://theweatherservice')
       .get(/observations.json/)
-      .reply(200, { observation: {weather: 'good'} })
+      .reply(200, { observation: { weather: 'good' } })
       .get(/10day.json/)
-      .reply(200, { forecasts: [{forecast: 'good'}] })
+      .reply(200, { forecasts: [{ forecast: 'good' }] })
       .get(/alerts.json/)
-      .reply(200, { alerts: [{alert: 'none'}] })
+      .reply(200, { alerts: [{ alert: 'none' }] });
 
     observations.main({
       'services.weather.url': 'http://theweatherservice',
       latitude: 38.89,
       longitude: -77.03
-    }).then(result => {
+    }).then((result) => {
       assert.equal(result.observation.weather, 'good');
       assert.equal(result.forecasts.length, 1);
       assert.equal(result.forecasts[0].forecast, 'good');
@@ -41,5 +41,4 @@ describe('Observations', () => {
       done(null);
     });
   });
-
 });

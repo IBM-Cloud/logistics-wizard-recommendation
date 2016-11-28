@@ -10,7 +10,9 @@
     "browser" : false
   },
   "globals" : {
-    "whisk": true
+    "whisk": true,
+    "describe": true,
+    "it": true
   },
   "rules": {
     "no-underscore-dangle": [0],

@@ -19,33 +19,32 @@ const nock = require('nock');
 
 const retailers = [
   {
-    "id": "201",
-    "address": {
-      "city": "Raleigh",
-      "state": "North Carolina",
-      "country": "US",
-      "latitude": 35.71,
-      "longitude": -78.63
+    id: '201',
+    address: {
+      city: 'Raleigh',
+      state: 'North Carolina',
+      country: 'US',
+      latitude: 35.71,
+      longitude: -78.63
     }
   },
   {
-    "id": "203",
-    "address": {
-      "city": "San Francisco",
-      "state": "California",
-      "country": "US",
-      "latitude": 37.72,
-      "longitude": -122.44
+    id: '203',
+    address: {
+      city: 'San Francisco',
+      state: 'California',
+      country: 'US',
+      latitude: 37.72,
+      longitude: -122.44
     }
   }
 ];
 
 describe('Recommend', () => {
-
   it('filters retailers on event location', (done) => {
     const event = {
-        "lat": 38.89,
-        "lon": -77.03
+      lat: 38.89,
+      lon: -77.03
     };
     recommend.filterRetailers(retailers, event, (err, filtered) => {
       assert.equal(1, filtered.length);
@@ -63,11 +62,11 @@ describe('Recommend', () => {
     recommend.main({
       demoGuid: 'MyGUID',
       event: {
-        "lat": 38.89,
-        "lon": -77.03
+        lat: 38.89,
+        lon: -77.03
       },
-      "services.controller.url": 'http://fail'
-    }).catch(err => {
+      'services.controller.url': 'http://fail'
+    }).catch((err) => {
       assert(err != null);
       done(null);
     });
@@ -82,31 +81,29 @@ describe('Recommend', () => {
     // intercept the call to persist recommendations
     nock('http://cloudant')
       .put('/recommendations')
-      .reply(200, '{"ok":true}')
+      .reply(200, { ok: true })
       .post('/recommendations/_bulk_docs?include_docs=true')
-      .reply(200, (uri, requestBody) => {
-        return requestBody.docs.map((row, index) => ({
-          'id': (index+1)*100,
-          'rev': 0
-        }));
-      });
+      .reply(200, (uri, requestBody) =>
+        requestBody.docs.map((row, index) => ({
+          id: (index + 1) * 100,
+          rev: 0
+        })));
 
     // trigger a recommendation
     recommend.main({
       demoGuid: 'MyGUID',
       event: {
-        "lat": 38.89,
-        "lon": -77.03,
+        lat: 38.89,
+        lon: -77.03,
       },
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',
       'services.cloudant.database': 'recommendations'
-    }).then(result => {
+    }).then((result) => {
       assert.equal('MyGUID', result.demoGuid);
       assert.equal(1, result.recommendations.length);
       assert.equal(100, result.recommendations[0]._id);
       done(null);
     });
   });
-
 });

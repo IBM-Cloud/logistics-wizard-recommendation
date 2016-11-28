@@ -34,10 +34,10 @@ describe('Acknowledge', () => {
       recommendationId: 'myRecommendationId',
       'services.cloudant.url': 'http://cloudant',
       'services.cloudant.database': 'recommendations'
-    }).then(result => {
+    }).then((result) => {
       assert.equal(true, result.ok);
       done(null);
-    })
+    });
   });
 
   it('handles failures of Cloudant', (done) => {
@@ -57,11 +57,10 @@ describe('Acknowledge', () => {
       recommendationRev: '12',
       'services.cloudant.url': 'http://cloudant',
       'services.cloudant.database': 'recommendations'
-    }).catch(err => {
+    }).catch((err) => {
       assert.isOk(err);
       assert.equal(false, err.ok);
       done(null);
     });
   });
-
 });

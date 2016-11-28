@@ -52,13 +52,13 @@ describe('Retrieve', () => {
       demoGuid: 'MyGUID',
       'services.cloudant.url': 'http://cloudant',
       'services.cloudant.database': 'recommendations'
-    }).then(result => {
+    }).then((result) => {
       assert.equal(2, result.recommendations.length);
       assert.equal(0, result.recommendations[0]._id);
       assert.equal(1, result.recommendations[1]._id);
       assert.equal(10, result.recommendations[0].fromId);
       assert.equal(40, result.recommendations[1].toId);
       done(null);
-    })
+    });
   });
 });
