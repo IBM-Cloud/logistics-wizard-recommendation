@@ -40,7 +40,25 @@ describe('Acknowledge', () => {
     });
   });
 
-  it('handles failures of Cloudant', (done) => {
+  it('handles failures of Cloudant during get', (done) => {
+    // intercept the cloudant delete and fail
+    nock('http://cloudant')
+      .get('/recommendations/myRecommendationId')
+      .reply(500);
+
+    acknowledge({
+      demoGuid: 'MyGUID',
+      recommendationId: 'myRecommendationId',
+      recommendationRev: '12',
+      'services.cloudant.url': 'http://cloudant',
+      'services.cloudant.database': 'recommendations'
+    }).catch((err) => {
+      assert.equal(false, err.ok);
+      done(null);
+    });
+  });
+
+  it('handles failures of Cloudant during delete', (done) => {
     // intercept the cloudant delete and fail
     nock('http://cloudant')
       .get('/recommendations/myRecommendationId')

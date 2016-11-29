@@ -22,6 +22,8 @@ const request = require('request');
 const GeoPoint = require('geopoint');
 const Cloudant = require('cloudant');
 
+const self = exports;
+
 /**
  * OpenWhisk entry point.
  *
@@ -45,21 +47,21 @@ function main(args) {
     async.waterfall([
       // retrieve list of retailers
       function(callback) {
-        getRetailers(args['services.controller.url'],
+        self.getRetailers(args['services.controller.url'],
           args.demoGuid, callback);
       },
       // identify retailers affected by the weather event
       function(retailers, callback) {
         console.log('args.event: ....', args.event);
-        filterRetailers(retailers, args.event, callback);
+        self.filterRetailers(retailers, args.event, callback);
       },
       // retrieve their stock and make new shipments
       function(retailers, callback) {
-        recommend(retailers, callback);
+        self.recommend(retailers, callback);
       },
       // persist the recommendations
       function(recommendations, callback) {
-        persist(
+        self.persist(
           args['services.cloudant.url'],
           args['services.cloudant.database'],
           args.demoGuid,
@@ -91,15 +93,12 @@ function getRetailers(controllerUrl, demoGuid, callback) {
   const retailerUrl = `${controllerUrl}/api/v1/demos/${demoGuid}/retailers`;
   console.log(`Retrieving retailers... ${retailerUrl}`);
   request.get({ url: retailerUrl, json: true }, (error, response, body) => {
-    if (error) {
-      console.log('getRetailers ERROR', error);
-      callback(error);
-    } else if (response.statusCode === 200) {
+    if (response.statusCode === 200) {
       const retailLocations = body;
       console.log(`Got ${retailLocations.length} retailLocations.`);
       callback(null, retailLocations);
     } else {
-      console.log('getRetailers ERROR', response.statusCode);
+      console.log('getRetailers ERROR', error, response.statusCode);
       callback({ error: response.statusCode });
     }
   });
@@ -182,21 +181,19 @@ function persist(cloudantUrl, cloudantDatabase, demoGuid, recommendations, callb
     retryTimeout: 500
   });
 
-  cloudant.db.create(cloudantDatabase, () => {
-    const records = recommendations.map(reco => ({
-      guid: demoGuid, recommendation: reco }));
-    const db = cloudant.use(cloudantDatabase);
-    db.bulk({ docs: records }, { include_docs: true }, (bulkErr, result) => {
-      if (bulkErr) {
-        callback(bulkErr);
-      } else {
-        // inject the cloudant IDs into the recommendations
-        result.forEach((doc, index) => {
-          recommendations[index]._id = doc.id;
-        });
-        callback(null, recommendations);
-      }
-    });
+  const records = recommendations.map(reco => ({
+    guid: demoGuid, recommendation: reco }));
+  const db = cloudant.use(cloudantDatabase);
+  db.bulk({ docs: records }, { include_docs: true }, (bulkErr, result) => {
+    if (bulkErr) {
+      callback(bulkErr);
+    } else {
+      // inject the cloudant IDs into the recommendations
+      result.forEach((doc, index) => {
+        recommendations[index]._id = doc.id;
+      });
+      callback(null, recommendations);
+    }
   });
 }
 exports.persist = persist;

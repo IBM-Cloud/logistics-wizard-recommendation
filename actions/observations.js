@@ -19,6 +19,8 @@
  */
 const async = require('async');
 
+const self = exports;
+
 /**
  * OpenWhisk entry point.
  *
@@ -35,7 +37,7 @@ function main(args) {
   console.log('Get weather for', args.latitude, args.longitude);
 
   return new Promise((resolve, reject) => {
-    observations(
+    self.observations(
       args['services.weather.url'],
       args.latitude,
       args.longitude,
@@ -106,3 +108,4 @@ function observations(weatherUrl, latitude, longitude, observeCallback) {
     }
   });
 }
+exports.observations = observations;
