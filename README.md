@@ -20,6 +20,8 @@ It is built with OpenWhisk highlighting how OpenWhisk can be used to implement a
 
   * **Observations** - returns weather conditions at a given location.
 
+  * **Notify** - formats recommendations for notification messages.
+
 ### Simulating weather events
 
 For demo purpose, the *Recommend* action can be called interactively to inject a weather event into the system.
