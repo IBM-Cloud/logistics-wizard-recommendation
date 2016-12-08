@@ -54,10 +54,10 @@ function install() {
     dist/recommend.bundle.js
   wsk action create $PACKAGE_NAME/retrieve\
     -a description 'Return the list of recommendations'\
-    dist/retrieve.bundle.js
+    actions/retrieve.js
   wsk action create $PACKAGE_NAME/acknowledge\
     -a description 'Acknowledge a list of recommendations'\
-    dist/acknowledge.bundle.js
+    actions/acknowledge.js
   wsk action create $PACKAGE_NAME/observations\
     -a description 'Return weather observations for a location'\
     dist/observations.bundle.js
@@ -84,8 +84,8 @@ function uninstall() {
 function update() {
   echo "Updating actions..."
   wsk action update $PACKAGE_NAME/recommend         dist/recommend.bundle.js
-  wsk action update $PACKAGE_NAME/retrieve          dist/retrieve.bundle.js
-  wsk action update $PACKAGE_NAME/acknowledge       dist/acknowledge.bundle.js
+  wsk action update $PACKAGE_NAME/retrieve          actions/retrieve.js
+  wsk action update $PACKAGE_NAME/acknowledge       actions/acknowledge.js
   wsk action update $PACKAGE_NAME/observations      dist/observations.bundle.js
   wsk action update $PACKAGE_NAME/prepare-for-slack actions/prepare-for-slack.js
 }

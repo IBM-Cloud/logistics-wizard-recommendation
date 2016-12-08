@@ -52,7 +52,6 @@ function main(args) {
       },
       // identify retailers affected by the weather event
       function(retailers, callback) {
-        console.log('args.event: ....', args.event);
         self.filterRetailers(retailers, args.event, callback);
       },
       // retrieve their stock and make new shipments
