@@ -61,4 +61,25 @@ describe('Observations', () => {
       done(null);
     });
   });
+
+  it('returns current weather even if forecasts/alerts fail', (done) => {
+    // mock the call to the Weather service
+    nock('http://theweatherservice')
+      .get(/observations.json/)
+      .reply(200, { observation: { weather: 'good' } })
+      .get(/10day.json/)
+      .reply(400)
+      .get(/alerts.json/)
+      .reply(400);
+
+    observations.main({
+      'services.weather.url': 'http://theweatherservice',
+      latitude: 38.89,
+      longitude: -77.03
+    }).then((result) => {
+      console.log('last result', result);
+      assert.equal(result.observation.weather, 'good');
+      done(null);
+    });
+  });
 });

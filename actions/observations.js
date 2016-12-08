@@ -80,24 +80,24 @@ function observations(weatherUrl, latitude, longitude, observeCallback) {
     function(callback) {
       weather.tendayByGeolocation(latitude, longitude, {}, (err, response) => {
         if (err) {
-          callback(err);
+          console.log('Got an error retrieving forecasts. Assuming no forecast.', err);
         } else {
           console.log('Retrieved forecasts');
           result.forecasts = response.forecasts;
-          callback(null);
         }
+        callback(null);
       });
     },
     // get alerts
     function(callback) {
       weather.alertsByGeolocation(latitude, longitude, {}, (err, response) => {
         if (err) {
-          callback(err);
+          console.log('Got an error retrieving alerts. Assuming no alert.', err);
         } else {
           console.log('Retrieved alerts');
           result.alerts = response.alerts;
-          callback(null);
         }
+        callback(null);
       });
     }
   ], (err) => {
