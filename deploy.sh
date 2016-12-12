@@ -32,9 +32,21 @@ function usage() {
 }
 
 function install() {
+
+  echo "Creating database..."
+  # ignore "database already exists error"
+  curl -s -X PUT $CLOUDANT_URL/$CLOUDANT_DATABASE | grep -v file_exists
+
+  echo "Inserting database design documents..."
+  # ignore "document already exists error"
+  curl -s -X POST -H 'Content-Type: application/json' -d @database-designs.json $CLOUDANT_URL/$CLOUDANT_DATABASE/_bulk_docs | grep -v conflict
+
   echo "Creating $PACKAGE_NAME package"
   wsk package create $PACKAGE_NAME\
-    -p services.controller.url $CONTROLLER_SERVICE
+    -p services.controller.url $CONTROLLER_SERVICE\
+    -p services.weather.url $WEATHER_SERVICE\
+    -p services.cloudant.url $CLOUDANT_URL\
+    -p services.cloudant.database $CLOUDANT_DATABASE
 
   echo "Creating actions"
   wsk action create $PACKAGE_NAME/recommend\
@@ -42,10 +54,16 @@ function install() {
     dist/recommend.bundle.js
   wsk action create $PACKAGE_NAME/retrieve\
     -a description 'Return the list of recommendations'\
-    dist/retrieve.bundle.js
+    actions/retrieve.js
   wsk action create $PACKAGE_NAME/acknowledge\
     -a description 'Acknowledge a list of recommendations'\
-    dist/acknowledge.bundle.js
+    actions/acknowledge.js
+  wsk action create $PACKAGE_NAME/observations\
+    -a description 'Return weather observations for a location'\
+    dist/observations.bundle.js
+  wsk action create $PACKAGE_NAME/prepare-for-slack\
+    -a description 'Transform a recommendation into a Slack message'\
+    actions/prepare-for-slack.js
 }
 
 function uninstall() {
@@ -53,6 +71,8 @@ function uninstall() {
   wsk action delete $PACKAGE_NAME/recommend
   wsk action delete $PACKAGE_NAME/retrieve
   wsk action delete $PACKAGE_NAME/acknowledge
+  wsk action delete $PACKAGE_NAME/observations
+  wsk action delete $PACKAGE_NAME/prepare-for-slack
 
   echo "Removing package..."
   wsk package delete $PACKAGE_NAME
@@ -63,14 +83,19 @@ function uninstall() {
 
 function update() {
   echo "Updating actions..."
-  wsk action update $PACKAGE_NAME/recommend   dist/recommend.bundle.js
-  wsk action update $PACKAGE_NAME/retrieve    dist/retrieve.bundle.js
-  wsk action update $PACKAGE_NAME/acknowledge dist/acknowledge.bundle.js
+  wsk action update $PACKAGE_NAME/recommend         dist/recommend.bundle.js
+  wsk action update $PACKAGE_NAME/retrieve          actions/retrieve.js
+  wsk action update $PACKAGE_NAME/acknowledge       actions/acknowledge.js
+  wsk action update $PACKAGE_NAME/observations      dist/observations.bundle.js
+  wsk action update $PACKAGE_NAME/prepare-for-slack actions/prepare-for-slack.js
 }
 
 function showenv() {
   echo "PACKAGE_NAME=$PACKAGE_NAME"
   echo "CONTROLLER_SERVICE=$CONTROLLER_SERVICE"
+  echo "WEATHER_SERVICE=$WEATHER_SERVICE"
+  echo "CLOUDANT_URL=$CLOUDANT_URL"
+  echo "CLOUDANT_DATABASE=$CLOUDANT_DATABASE"
 }
 
 case "$1" in

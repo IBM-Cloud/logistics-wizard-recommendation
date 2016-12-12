@@ -17,22 +17,72 @@
 /**
  * @module retrieve
  */
+const Cloudant = require('cloudant');
+
+const self = exports;
 
 /**
  * OpenWhisk entry point.
  *
  * @param {Object} args Expected arguments:
  * <li> {string} demoGuid - the demo environment to use
+ * <li> {string} services.cloudant.url - URL to the Cloudant service
+ * <li> {string} services.cloudant.database - Database where recommendations are stored
  * @returns {Object}
- * <li> {string} demoGuid
  * <li> {Object[]} recommendations
  */
 function main(args) {
   console.log('Retrieve recommendations for demo', args.demoGuid);
 
-  whisk.done({
-    demoGuid: args.demoGuid,
-    recommendations: [],
+  return new Promise((resolve, reject) => {
+    self.retrieve(
+      args['services.cloudant.url'],
+      args['services.cloudant.database'],
+      args.demoGuid,
+      (err, result) => {
+        if (err) {
+          console.log('[KO]', err);
+          reject({ ok: false });
+        } else {
+          console.log('[OK] Got', result.length, 'recommendations');
+          resolve({ recommendations: result });
+        }
+      }
+    );
   });
 }
 exports.main = global.main = main;
+
+/**
+ * Retrieves recommendations linked to a given demo
+ * <li> {string} cloudantUrl - URL to the Cloudant service
+ * <li> {string} cloudantDatabase - Database where recommendations are stored
+ * <li> {string} demoGuid
+ * <li> callback - err, recommendations
+ */
+function retrieve(cloudantUrl, cloudantDatabase, demoGuid, callback) {
+  console.log('Searching index...');
+  const cloudant = Cloudant({
+    url: cloudantUrl,
+    plugin: 'retry',
+    retryAttempts: 5,
+    retryTimeout: 500
+  });
+
+  const db = cloudant.db.use(cloudantDatabase);
+  db.search('recommendations', 'byGuid',
+    { q: `guid:${demoGuid}`, include_docs: true }, (err, result) => {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, result.rows.map((row) => {
+          // remap the recommendation object
+          // to make it look like what we returned in recommend.js
+          const recommendation = row.doc.recommendation;
+          recommendation._id = row.doc._id;
+          return recommendation;
+        }));
+      }
+    });
+}
+exports.retrieve = retrieve;

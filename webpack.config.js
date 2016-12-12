@@ -7,8 +7,7 @@ module.exports = {
 
   entry: {
     recommend: `${__dirname}/actions/recommend`,
-    retrieve: `${__dirname}/actions/retrieve`,
-    acknowledge: `${__dirname}/actions/acknowledge`,
+    observations: `${__dirname}/actions/observations`,
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -23,7 +22,7 @@ module.exports = {
     if (context.indexOf('node_modules') === -1 &&
       request.indexOf('/') === -1 &&
       !dependencies[request]) {
-      console.log(request, 'is assumed to be an external dependency');
+      console.log('...', request, 'is assumed to be an external dependency');
       callback(null, `commonjs ${request}`);
     } else {
       callback();
@@ -31,15 +30,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.json$/, loader: 'json-loader' },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015'],
-        },
-      },
+      { test: /\.json$/, loader: 'json-loader' }
     ],
   },
   target: 'node',
