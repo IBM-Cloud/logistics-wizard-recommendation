@@ -17,10 +17,6 @@
 # load configuration variables
 source local.env
 
-# capture the namespace where actions will be created
-CURRENT_NAMESPACE=`wsk property get --namespace | awk '{print $3}'`
-echo "Current namespace is $CURRENT_NAMESPACE."
-
 # PACKAGE_NAME is configurable so that multiple versions of the actions
 # can be deployed in different packages under the same namespace
 if [ -z $PACKAGE_NAME ]; then
