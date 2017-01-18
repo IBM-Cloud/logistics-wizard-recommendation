@@ -197,7 +197,7 @@ function cleanup(cloudantUrl, cloudantDatabase, demoGuid, callback) {
       } else {
         console.log('Deleting', result.rows.length, 'recommendations...');
         const toDelete = {
-          docs: result.rows.map((row) => {
+          docs: result.rows.map((row) => { // eslint-disable-line
             return {
               _id: row.doc._id,
               _rev: row.doc._rev,
