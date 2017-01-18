@@ -195,6 +195,7 @@ function cleanup(cloudantUrl, cloudantDatabase, demoGuid, callback) {
         // no row to delete, return
         callback(null);
       } else {
+        console.log('Deleting', result.rows.length, 'recommendations...');
         const toDelete = {
           docs: result.rows.map((row) => {
             return {
