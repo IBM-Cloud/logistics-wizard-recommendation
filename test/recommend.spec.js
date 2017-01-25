@@ -44,7 +44,8 @@ describe('Recommend', () => {
   it('filters retailers on event location', (done) => {
     const event = {
       lat: 38.89,
-      lon: -77.03
+      lon: -77.03,
+      radiusInKm: 800
     };
     recommend.filterRetailers(retailers, event, (err, filtered) => {
       assert.equal(1, filtered.length);
@@ -70,7 +71,8 @@ describe('Recommend', () => {
       demoGuid: 'MyGUID',
       event: {
         lat: 38.89,
-        lon: -77.03
+        lon: -77.03,
+        radiusInKm: 800
       },
       'services.controller.url': 'http://fail',
       'services.cloudant.url': 'http://cloudant',
@@ -107,6 +109,7 @@ describe('Recommend', () => {
       event: {
         lat: 38.89,
         lon: -77.03,
+        radiusInKm: 800
       },
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',
@@ -141,6 +144,7 @@ describe('Recommend', () => {
       event: {
         lat: 38.89,
         lon: -77.03,
+        radiusInKm: 800
       },
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',
@@ -168,6 +172,7 @@ describe('Recommend', () => {
       event: {
         lat: 38.89,
         lon: -77.03,
+        radiusInKm: 800
       },
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',
@@ -215,6 +220,7 @@ describe('Recommend', () => {
       event: {
         lat: 38.89,
         lon: -77.03,
+        radiusInKm: 800
       },
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',

@@ -43,7 +43,6 @@ const retailers = [
 
 describe('End to End Tests', () => {
   it('clears up recommendations between two simulations for the same demo', (done) => {
-
     // trigger a recommendation
     nock('http://intercept')
       .get('/api/v1/demos/MyGUID/retailers')
@@ -65,6 +64,7 @@ describe('End to End Tests', () => {
       event: {
         lat: 38.89,
         lon: -77.03,
+        radiusInKm: 800
       },
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',
@@ -145,6 +145,7 @@ describe('End to End Tests', () => {
         event: {
           lat: 38.89,
           lon: -77.03,
+          radiusInKm: 800
         },
         'services.controller.url': 'http://intercept',
         'services.cloudant.url': 'http://cloudant',
