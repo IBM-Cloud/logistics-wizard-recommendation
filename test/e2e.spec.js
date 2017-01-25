@@ -65,6 +65,7 @@ describe('End to End Tests', () => {
       event: {
         lat: 38.89,
         lon: -77.03,
+        radiusInKm: 800
       },
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',
@@ -145,6 +146,7 @@ describe('End to End Tests', () => {
         event: {
           lat: 38.89,
           lon: -77.03,
+          radiusInKm: 800
         },
         'services.controller.url': 'http://intercept',
         'services.cloudant.url': 'http://cloudant',
