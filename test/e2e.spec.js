@@ -43,7 +43,6 @@ const retailers = [
 
 describe('End to End Tests', () => {
   it('clears up recommendations between two simulations for the same demo', (done) => {
-
     // trigger a recommendation
     nock('http://intercept')
       .get('/api/v1/demos/MyGUID/retailers')
