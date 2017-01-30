@@ -12,7 +12,7 @@ chmod +x ~/wsk/wsk
 export PATH=$PATH:~/wsk
 
 # Configure the OpenWhisk CLI
-wsk property set --apihost openwhisk.ng.bluemix.net --auth "${OPENWHISK_AUTH}" --namespace "${CF_ORG}_${CF_SPACE}"
+wsk property set --apihost openwhisk.ng.bluemix.net --auth "${OPENWHISK_AUTH}"
 
 # inject the location of the controller service
 domain=".mybluemix.net"

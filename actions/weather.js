@@ -31,8 +31,7 @@ function Weather(url) {
       encodeURIComponent(latitude.toFixed(2)) + '/' +
       encodeURIComponent(longitude.toFixed(2)) +
       endPoint +
-      (endPoint.indexOf('?') >= 0 ? '&' : '?') +
-      'language=' + encodeURIComponent(mergedOptions.language) +
+      '?language=' + encodeURIComponent(mergedOptions.language) +
       '&units=' + encodeURIComponent(mergedOptions.units);
 
     request.get(

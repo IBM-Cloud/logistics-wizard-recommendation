@@ -45,6 +45,14 @@ function main(args) {
 
   return new Promise((resolve, reject) => {
     async.waterfall([
+      // delete existing recommendations for this demo
+      function(callback) {
+        self.cleanup(
+          args['services.cloudant.url'],
+          args['services.cloudant.database'],
+          args.demoGuid,
+          callback);
+      },
       // retrieve list of retailers
       function(callback) {
         self.getRetailers(args['services.controller.url'],
@@ -128,8 +136,8 @@ function filterRetailers(retailers, event, callback) {
     const distance = retailLocation.distanceTo(stormLocation, true);
     console.log('Distance between', retailer.address.city, 'and event is', distance);
 
-    // if its within 800km
-    if (distance < 800) {
+    // if its within the event radius expressed in kilometers
+    if (distance < event.radiusInKm) {
       console.log(`Affected Location: ${retailer.address.city}`);
       filtered.push(retailer);
     }
@@ -161,6 +169,53 @@ function recommend(retailers, callback) {
   callback(null, recommendations);
 }
 exports.recommend = recommend;
+
+/**
+ * Removes existing recommendations for the given demo
+ *
+ * @param {string} cloudantUrl
+ * @param {string} cloudantDatabase
+ * @param {string} demoGuid
+ * @param callback - err, persisted recommendations
+ */
+function cleanup(cloudantUrl, cloudantDatabase, demoGuid, callback) {
+  console.log('Removing existing recommendations...');
+  const cloudant = Cloudant({
+    url: cloudantUrl,
+    plugin: 'retry',
+    retryAttempts: 5,
+    retryTimeout: 500
+  });
+  const db = cloudant.use(cloudantDatabase);
+  db.search('recommendations', 'byGuid',
+    { q: `guid:${demoGuid}`, include_docs: true }, (err, result) => {
+      if (err) {
+        callback(err);
+      } else if (result.rows.length === 0) {
+        // no row to delete, return
+        callback(null);
+      } else {
+        console.log('Deleting', result.rows.length, 'recommendations...');
+        const toDelete = {
+          docs: result.rows.map((row) => { // eslint-disable-line
+            return {
+              _id: row.doc._id,
+              _rev: row.doc._rev,
+              _deleted: true
+            };
+          })
+        };
+        db.bulk(toDelete, (bulkErr) => {
+          if (bulkErr) {
+            callback(bulkErr);
+          } else {
+            callback(null);
+          }
+        });
+      }
+    });
+}
+exports.cleanup = cleanup;
 
 /**
  * Persists the recommendations.

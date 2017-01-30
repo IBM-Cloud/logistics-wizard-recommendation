@@ -44,7 +44,8 @@ describe('Recommend', () => {
   it('filters retailers on event location', (done) => {
     const event = {
       lat: 38.89,
-      lon: -77.03
+      lon: -77.03,
+      radiusInKm: 800
     };
     recommend.filterRetailers(retailers, event, (err, filtered) => {
       assert.equal(1, filtered.length);
@@ -58,14 +59,24 @@ describe('Recommend', () => {
       .get('/api/v1/demos/MyGUID/retailers')
       .reply(500, []);
 
+    nock('http://cloudant')
+      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+      .reply(200, {
+        total_rows: 0,
+        rows: []
+      });
+
     // trigger a recommendation
     recommend.main({
       demoGuid: 'MyGUID',
       event: {
         lat: 38.89,
-        lon: -77.03
+        lon: -77.03,
+        radiusInKm: 800
       },
-      'services.controller.url': 'http://fail'
+      'services.controller.url': 'http://fail',
+      'services.cloudant.url': 'http://cloudant',
+      'services.cloudant.database': 'recommendations'
     }).catch((err) => {
       assert.equal(false, err.ok);
       done(null);
@@ -80,6 +91,11 @@ describe('Recommend', () => {
 
     // intercept the call to persist recommendations
     nock('http://cloudant')
+      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+      .reply(200, {
+        total_rows: 0,
+        rows: []
+      })
       .post('/recommendations/_bulk_docs?include_docs=true')
       .reply(200, (uri, requestBody) =>
         requestBody.docs.map((row, index) => ({
@@ -93,6 +109,7 @@ describe('Recommend', () => {
       event: {
         lat: 38.89,
         lon: -77.03,
+        radiusInKm: 800
       },
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',
@@ -113,6 +130,11 @@ describe('Recommend', () => {
 
     // intercept the call to persist recommendations
     nock('http://cloudant')
+      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+      .reply(200, {
+        total_rows: 0,
+        rows: []
+      })
       .post('/recommendations/_bulk_docs?include_docs=true')
       .reply(500);
 
@@ -122,6 +144,83 @@ describe('Recommend', () => {
       event: {
         lat: 38.89,
         lon: -77.03,
+        radiusInKm: 800
+      },
+      'services.controller.url': 'http://intercept',
+      'services.cloudant.url': 'http://cloudant',
+      'services.cloudant.database': 'recommendations'
+    }).catch((result) => {
+      assert.equal(false, result.ok);
+      done(null);
+    });
+  });
+
+  it('handles error when retrieving existing recommendations', (done) => {
+    // intercept the call to retrieve retailers
+    nock('http://intercept')
+      .get('/api/v1/demos/MyGUID/retailers')
+      .reply(200, retailers);
+
+    // intercept the call to persist recommendations
+    nock('http://cloudant')
+      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+      .reply(500);
+
+    // trigger a recommendation
+    recommend.main({
+      demoGuid: 'MyGUID',
+      event: {
+        lat: 38.89,
+        lon: -77.03,
+        radiusInKm: 800
+      },
+      'services.controller.url': 'http://intercept',
+      'services.cloudant.url': 'http://cloudant',
+      'services.cloudant.database': 'recommendations'
+    }).catch((result) => {
+      assert.equal(false, result.ok);
+      done(null);
+    });
+  });
+
+  it('handles error when deleting existing recommendations', (done) => {
+    // intercept the call to retrieve retailers
+    nock('http://intercept')
+      .get('/api/v1/demos/MyGUID/retailers')
+      .reply(200, retailers);
+
+    // intercept the call to persist recommendations
+    nock('http://cloudant')
+      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+      .reply(200, {
+        total_rows: 0,
+        rows: [{
+          doc: {
+            _id: 100,
+            _rev: 0,
+            recommendation: {
+              status: 'NEW',
+              estimatedTimeOfArrival: '2016-10-16T00:00:00.000Z',
+              fromId: 1,
+              toId: '201'
+            }
+          }
+        }]
+      })
+      .post('/recommendations/_bulk_docs')
+      .reply(500, (uri, requestBody) => {
+        assert.equal(1, requestBody.docs.length);
+        assert.equal(true, requestBody.docs[0]._deleted);
+        return {};
+      });
+
+    // trigger a recommendation
+    recommend.main({
+      demoGuid: 'MyGUID',
+      event: {
+        lat: 38.89,
+        lon: -77.03,
+        radiusInKm: 800
       },
       'services.controller.url': 'http://intercept',
       'services.cloudant.url': 'http://cloudant',
