@@ -20,7 +20,7 @@ source local.env
 # PACKAGE_NAME is configurable so that multiple versions of the actions
 # can be deployed in different packages under the same namespace
 if [ -z $PACKAGE_NAME ]; then
-  PACKAGE_NAME=logistics-wizard-recommendation
+  PACKAGE_NAME=lwr
 fi
 
 function usage() {
