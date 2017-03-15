@@ -137,7 +137,7 @@ function filterRetailers(retailers, event, callback) {
     console.log('Distance between', retailer.address.city, 'and event is', distance);
 
     // if its within the event radius expressed in kilometers
-    if (distance < event.radiusInKm) {
+    if (distance < event.radiusInKm + 1000) {
       console.log(`Affected Location: ${retailer.address.city}`);
       filtered.push(retailer);
     }
