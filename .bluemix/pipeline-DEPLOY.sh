@@ -26,12 +26,16 @@ case "${REGION_ID}" in
 esac
 export CONTROLLER_SERVICE=https://$CONTROLLER_SERVICE_APP_NAME$domain
 
-# create a Weather service
-cf create-service weatherinsights Free-v2 logistics-wizard-weatherinsights
-# create a key for this service
-cf create-service-key logistics-wizard-weatherinsights for-openwhisk
-# retrieve the URL - it contains credentials + API URL
-export WEATHER_SERVICE=`cf service-key logistics-wizard-weatherinsights for-openwhisk | grep \"url\" | awk -F '"' '{print $4}'`
+if [ -z "$WEATHER_SERVICE" ]; then
+  # create a Weather service
+  cf create-service weatherinsights Free-v2 logistics-wizard-weatherinsights
+  # create a key for this service
+  cf create-service-key logistics-wizard-weatherinsights for-openwhisk
+  # retrieve the URL - it contains credentials + API URL
+  export WEATHER_SERVICE=`cf service-key logistics-wizard-weatherinsights for-openwhisk | grep \"url\" | awk -F '"' '{print $4}'`
+else
+  echo 'Using configured url for Weather Company Data service'
+fi
 
 # create a Cloudant service
 cf create-service cloudantNoSQLDB Lite logistics-wizard-recommendation-db
