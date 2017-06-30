@@ -11,8 +11,12 @@ curl https://openwhisk.ng.bluemix.net/cli/go/download/linux/amd64/wsk > ~/wsk/ws
 chmod +x ~/wsk/wsk
 export PATH=$PATH:~/wsk
 
+if [ -z "$OPENWHISK_API_HOST" ]; then
+  echo 'OPENWHISK_API_HOST was not set in the pipeline. Using default value.'
+  export OPENWHISK_API_HOST=openwhisk.ng.bluemix.net
+fi
 # Configure the OpenWhisk CLI
-wsk property set --apihost openwhisk.ng.bluemix.net --auth "${OPENWHISK_AUTH}"
+wsk property set --apihost "$OPENWHISK_API_HOST" --auth "${OPENWHISK_AUTH}"
 
 # inject the location of the controller service
 domain=".mybluemix.net"
