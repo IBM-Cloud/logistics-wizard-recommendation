@@ -188,7 +188,7 @@ function cleanup(cloudantUrl, cloudantDatabase, demoGuid, callback) {
   });
   const db = cloudant.use(cloudantDatabase);
   db.search('recommendations', 'byGuid',
-    { q: `guid:${demoGuid}`, include_docs: true }, (err, result) => {
+    { q: `guid:'${demoGuid}'`, include_docs: true }, (err, result) => {
       if (err) {
         callback(err);
       } else if (result.rows.length === 0) {

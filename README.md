@@ -1,10 +1,10 @@
 # Logistics Wizard - Weather Recommendation
 
-| **master** | [![Build Status](https://travis-ci.org/IBM-Bluemix/logistics-wizard-recommendation.svg?branch=master)](https://travis-ci.org/IBM-Bluemix/logistics-wizard-recommendation) [![Coverage Status](https://coveralls.io/repos/github/IBM-Bluemix/logistics-wizard-recommendation/badge.svg?branch=master)](https://coveralls.io/github/IBM-Bluemix/logistics-wizard-recommendation?branch=master) |
+| **master** | [![Build Status](https://travis-ci.org/IBM-Cloud/logistics-wizard-recommendation.svg?branch=master)](https://travis-ci.org/IBM-Cloud/logistics-wizard-recommendation) [![Coverage Status](https://coveralls.io/repos/github/IBM-Cloud/logistics-wizard-recommendation/badge.svg?branch=master)](https://coveralls.io/github/IBM-Cloud/logistics-wizard-recommendation?branch=master) |
 | ----- | ----- |
-| **dev** | [![Build Status](https://travis-ci.org/IBM-Bluemix/logistics-wizard-recommendation.svg?branch=dev)](https://travis-ci.org/IBM-Bluemix/logistics-wizard-recommendation) [![Coverage Status](https://coveralls.io/repos/github/IBM-Bluemix/logistics-wizard-recommendation/badge.svg?branch=dev)](https://coveralls.io/github/IBM-Bluemix/logistics-wizard-recommendation?branch=dev)|
+| **dev** | [![Build Status](https://travis-ci.org/IBM-Cloud/logistics-wizard-recommendation.svg?branch=dev)](https://travis-ci.org/IBM-Cloud/logistics-wizard-recommendation) [![Coverage Status](https://coveralls.io/repos/github/IBM-Cloud/logistics-wizard-recommendation/badge.svg?branch=dev)](https://coveralls.io/github/IBM-Cloud/logistics-wizard-recommendation?branch=dev)|
 
-This service is part of the larger [Logistics Wizard](https://github.com/IBM-Bluemix/logistics-wizard) project.
+This service is part of the larger [Logistics Wizard](https://github.com/IBM-Cloud/logistics-wizard) project.
 
 ## Overview
 
@@ -58,7 +58,7 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
 
 1. If you do not already have a Bluemix account, [sign up here](https://ibm.com/bluemix)
 
-1. The recommendation service depends on the [Controller](https://github.com/IBM-Bluemix/logistics-wizard-controller) and [ERP](https://github.com/IBM-Bluemix/logistics-wizard-erp) microservices. Make sure to deploy them first.
+1. The recommendation service depends on the [Controller](https://github.com/IBM-Cloud/logistics-wizard-controller) and [ERP](https://github.com/IBM-Cloud/logistics-wizard-erp) microservices. Make sure to deploy them first.
 
 1. In Bluemix, create an instance of the Weather Company Data service
 
@@ -99,7 +99,7 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
 1. Clone the app to your local environment from your terminal using the following command:
 
   ```
-  git clone https://github.com/IBM-Bluemix/logistics-wizard-recommendation.git
+  git clone https://github.com/IBM-Cloud/logistics-wizard-recommendation.git
   ```
 
 1. `cd` into the checkout directory
