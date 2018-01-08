@@ -71,7 +71,7 @@ function retrieve(cloudantUrl, cloudantDatabase, demoGuid, callback) {
 
   const db = cloudant.db.use(cloudantDatabase);
   db.search('recommendations', 'byGuid',
-    { q: `guid:${demoGuid}`, include_docs: true }, (err, result) => {
+    { q: `guid:'${demoGuid}'`, include_docs: true }, (err, result) => {
       if (err) {
         callback(err);
       } else {
