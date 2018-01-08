@@ -48,7 +48,7 @@ describe('End to End Tests', () => {
       .get('/api/v1/demos/MyGUID/retailers')
       .reply(200, retailers);
     nock('http://cloudant')
-      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
       .reply(200, {
         total_rows: 0,
         rows: []
@@ -79,7 +79,7 @@ describe('End to End Tests', () => {
     .then(() => {
       // retrieve recommendations
       nock('http://cloudant')
-        .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+        .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
         .reply(200, {
           rows: [
             {
@@ -111,7 +111,7 @@ describe('End to End Tests', () => {
         .get('/api/v1/demos/MyGUID/retailers')
         .reply(200, retailers);
       nock('http://cloudant')
-        .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+        .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
         .reply(200, {
           total_rows: 0,
           rows: [{
@@ -155,7 +155,7 @@ describe('End to End Tests', () => {
     .then(() => {
       // retrieve recommendations again
       nock('http://cloudant')
-        .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3AMyGUID&include_docs=true')
+        .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
         .reply(200, {
           rows: [
             {
