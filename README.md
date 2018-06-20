@@ -20,7 +20,7 @@ It is built with IBM Cloud Functions highlighting how Functions can be used to i
 
 For demo purpose, the *Recommend* action can be called interactively to inject a weather event into the system.
 
-![Architecture](https://g.gravizo.com/source/custom_mark10?https%3A%2F%2Fraw.githubusercontent.com%2FIBM-Cloud%2Flogistics-wizard-controller%2Fjune-sprint%2FREADME.md)
+![Architecture](https://g.gravizo.com/source/custom_mark10?https%3A%2F%2Fraw.githubusercontent.com%2FIBM-Cloud%2Flogistics-wizard-recommendation%2Fjune-sprint%2FREADME.md)
 
 <details> 
 <summary></summary>
