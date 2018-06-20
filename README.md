@@ -40,7 +40,7 @@ custom_mark10
     ui -> erp;
     {rank=same; recommend -> notify -> retrieve -> retrieve [style=invis] };
     {rank=source; weather -> erp -> ui [style=invis]};
-    weather [shape=rect label="Weather Company\nData service" style=filled color="%234E96DB" fontcolor=white];
+    weather [shape=rect label="Weather Company Data service" style=filled color="%234E96DB" fontcolor=white];
     recommend [label="Recommend" color="%232e8c70" style=filled fontcolor=white];
     notify [label="Notify" color="%232e8c70" style=filled fontcolor=white];
     retrieve [label="Retrieve" color="%232e8c70" style=filled fontcolor=white];
