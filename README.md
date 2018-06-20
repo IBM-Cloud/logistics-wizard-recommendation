@@ -20,31 +20,31 @@ It is built with IBM Cloud Functions highlighting how Functions can be used to i
 
 For demo purpose, the *Recommend* action can be called interactively to inject a weather event into the system.
 
-![Architecture](https://g.gravizo.com/svg?
+![Architecture](https://g.gravizo.com/g?
   digraph G {
-    node [fontname = "helvetica"]
-    rankdir=TB
-    weather -> recommend
-    recommend -> database
-    database -> notify
-    ui -> retrieve
-    ui -> observations
-    retrieve -> database
-    ui -> acknowledge
-    acknowledge -> database
-    recommend -> erp
-    ui -> erp
-    {rank=same; recommend -> notify -> retrieve -> retrieve [style=invis] }
-    {rank=source; weather -> erp -> ui [style=invis]}
-    weather [shape=rect label="Weather Company\\nData service" style=filled color="%234E96DB" fontcolor=white]
-    recommend [label="Recommend" color="%232e8c70" style=filled fontcolor=white]
-    notify [label="Notify" color="%232e8c70" style=filled fontcolor=white]
-    retrieve [label="Retrieve" color="%232e8c70" style=filled fontcolor=white]
-    acknowledge [label="Acknowledge" color="%232e8c70" style=filled fontcolor=white]
-    observations [label="Observations" color="%232e8c70" style=filled fontcolor=white]
-    erp [shape=rect label="ERP service" color="%238ec843" style=filled]
-    ui [label="Dashboard" color="%23e8c228" style=filled]
-    database [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Database"]
+    node [fontname = "helvetica"];
+    rankdir=TB;
+    weather -> recommend;
+    recommend -> database;
+    database -> notify;
+    ui -> retrieve;
+    ui -> observations;
+    retrieve -> database;
+    ui -> acknowledge;
+    acknowledge -> database;
+    recommend -> erp;
+    ui -> erp;
+    {rank=same; recommend -> notify -> retrieve -> retrieve [style=invis] };
+    {rank=source; weather -> erp -> ui [style=invis]};
+    weather [shape=rect label="Weather Company\\nData service" style=filled color="%234E96DB" fontcolor=white];
+    recommend [label="Recommend" color="%232e8c70" style=filled fontcolor=white];
+    notify [label="Notify" color="%232e8c70" style=filled fontcolor=white];
+    retrieve [label="Retrieve" color="%232e8c70" style=filled fontcolor=white];
+    acknowledge [label="Acknowledge" color="%232e8c70" style=filled fontcolor=white];
+    observations [label="Observations" color="%232e8c70" style=filled fontcolor=white];
+    erp [shape=rect label="ERP service" color="%238ec843" style=filled];
+    ui [label="Dashboard" color="%23e8c228" style=filled];
+    database [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Database"];
   }
 )
 
