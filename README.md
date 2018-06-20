@@ -20,7 +20,7 @@ It is built with IBM Cloud Functions highlighting how Functions can be used to i
 
 For demo purpose, the *Recommend* action can be called interactively to inject a weather event into the system.
 
-![Architecture](https://g.gravizo.com/g?
+<img src='https://g.gravizo.com/g?
   digraph G {
     node [fontname = "helvetica"];
     rankdir=TB;
@@ -45,8 +45,7 @@ For demo purpose, the *Recommend* action can be called interactively to inject a
     erp [shape=rect label="ERP service" color="%238ec843" style=filled];
     ui [label="Dashboard" color="%23e8c228" style=filled];
     database [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Database"];
-  }
-)
+  }'/>
 
 ## Running the app on IBM Cloud
 
