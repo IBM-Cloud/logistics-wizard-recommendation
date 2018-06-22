@@ -39,10 +39,10 @@ function install() {
 
   echo "Creating $PACKAGE_NAME package"
   bx cloud-functions package create $PACKAGE_NAME\
-    -p services.controller.url $CONTROLLER_SERVICE\
-    -p services.weather.url $WEATHER_SERVICE\
-    -p services.cloudant.url $CLOUDANT_URL\
-    -p services.cloudant.database $CLOUDANT_DATABASE
+    --param services.controller.url $CONTROLLER_SERVICE\
+    --param services.weather.url $WEATHER_SERVICE\
+    --param services.cloudant.url $CLOUDANT_URL\
+    --param services.cloudant.database $CLOUDANT_DATABASE
 
   echo "Creating actions"
   bx cloud-functions action create $PACKAGE_NAME/recommend\

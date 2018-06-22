@@ -49,5 +49,6 @@ bx service create logistics-wizard-recommendation-db for-openwhisk
 export CLOUDANT_URL=`bx service key-show logistics-wizard-recommendation-db for-openwhisk | grep \"url\" | awk -F '"' '{print $4}'`
 
 # Deploy the OpenWhisk triggers/actions/rules
+./deploy.sh --env
 ./deploy.sh --uninstall
 ./deploy.sh --install
