@@ -44,7 +44,7 @@ fi
 # create a Cloudant service
 bx service create cloudantNoSQLDB Lite logistics-wizard-recommendation-db
 # create a key for this service
-bx service create logistics-wizard-recommendation-db for-openwhisk
+bx service key-create logistics-wizard-recommendation-db for-openwhisk
 # retrieve the URL - it contains credentials + API URL
 export CLOUDANT_URL=`bx service key-show logistics-wizard-recommendation-db for-openwhisk | grep \"url\" | awk -F '"' '{print $4}'`
 
