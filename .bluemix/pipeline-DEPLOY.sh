@@ -6,7 +6,7 @@ if [ -z "$OPENWHISK_API_HOST" ]; then
 fi
 
 # Configure the IBM Cloud CLI
-echo 'Login IBM Cloud api=$CF_TARGET_URL org=$CF_ORG space=$CF_SPACE'
+echo Login IBM Cloud api=$CF_TARGET_URL org=$CF_ORG space=$CF_SPACE
 bx login -a "$CF_TARGET_URL" --apikey "$IAM_API_KEY" -o "$CF_ORG" -s "$CF_SPACE"
 
 echo 'Existing Functions packages'
