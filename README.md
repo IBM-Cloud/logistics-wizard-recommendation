@@ -152,7 +152,7 @@ custom_mark10
 
 Polling activations is good start to debug the Functions action execution. Run
 ```
-ibmcloud cloud-functions poll
+ibmcloud cloud-functions activation poll
 ```
 and invoke actions.
 

@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [ -z "$OPENWHISK_API_HOST" ]; then
-  echo 'OPENWHISK_API_HOST is not defined. Using default value.'
-  export OPENWHISK_API_HOST=openwhisk.ng.bluemix.net
-fi
-
 # Configure the IBM Cloud CLI
 echo Login IBM Cloud api=$CF_TARGET_URL org=$CF_ORG space=$CF_SPACE
 bx login -a "$CF_TARGET_URL" --apikey "$IAM_API_KEY" -o "$CF_ORG" -s "$CF_SPACE"
