@@ -160,7 +160,7 @@ function recommend(retailers, callback) {
     const recommendation = {
       status: 'NEW',
       estimatedTimeOfArrival: '2016-10-16T00:00:00.000Z',
-      fromId: 1,
+      fromId: '1',
       toId: retailer.id
     };
     recommendations.push(recommendation);
