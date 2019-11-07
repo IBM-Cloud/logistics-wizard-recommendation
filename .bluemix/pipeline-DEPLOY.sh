@@ -25,23 +25,23 @@ if [ -z "$CONTROLLER_SERVICE" ]; then
   exit 1;
 fi
 
-if [ -z "$WEATHER_SERVICE" ]; then
-  # create a Weather service
-  bx service create weatherinsights Free-v2 logistics-wizard-weatherinsights
-  # create a key for this service
-  bx service key-create logistics-wizard-weatherinsights for-openwhisk
-  # retrieve the URL - it contains credentials + API URL
-  export WEATHER_SERVICE=`bx service key-show logistics-wizard-weatherinsights for-openwhisk | grep \"url\" | awk -F '"' '{print $4}'`
-else
-  echo 'Using configured url for Weather Company Data service'
+# create the database
+if [ -z "$CLOUDANT_SERVICE_PLAN" ]; then
+  CLOUDANT_SERVICE_PLAN=Lite
 fi
 
-# create a Cloudant service
-bx service create cloudantNoSQLDB Lite logistics-wizard-recommendation-db
+ibmcloud cf create-service cloudantNoSQLDB $CLOUDANT_SERVICE_PLAN logistics-wizard-recommendation-db
+
 # create a key for this service
-bx service key-create logistics-wizard-recommendation-db for-openwhisk
+until ibmcloud cf create-service-key logistics-wizard-recommendation-db for-openwhisk
+do
+  echo "Will retry..."
+  sleep 10
+done
+
 # retrieve the URL - it contains credentials + API URL
-export CLOUDANT_URL=`bx service key-show logistics-wizard-recommendation-db for-openwhisk | grep \"url\" | awk -F '"' '{print $4}'`
+CREDENTIALS_JSON=$(ibmcloud cf service-key logistics-wizard-recommendation-db for-openwhisk | tail -n+5)
+export CLOUDANT_URL=$(echo $CREDENTIALS_JSON | jq -r .url)
 
 # Deploy the OpenWhisk triggers/actions/rules
 ./deploy.sh --env

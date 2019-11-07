@@ -40,7 +40,6 @@ function install() {
   echo "Creating $PACKAGE_NAME package"
   bx cloud-functions package create $PACKAGE_NAME\
     --param services.controller.url $CONTROLLER_SERVICE\
-    --param services.weather.url $WEATHER_SERVICE\
     --param services.cloudant.url $CLOUDANT_URL\
     --param services.cloudant.database $CLOUDANT_DATABASE
 
@@ -89,7 +88,6 @@ function update() {
 function showenv() {
   echo "PACKAGE_NAME=$PACKAGE_NAME"
   echo "CONTROLLER_SERVICE=$CONTROLLER_SERVICE"
-  echo "WEATHER_SERVICE=$WEATHER_SERVICE"
   echo "CLOUDANT_URL=$CLOUDANT_URL"
   echo "CLOUDANT_DATABASE=$CLOUDANT_DATABASE"
 }
