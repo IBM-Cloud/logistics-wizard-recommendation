@@ -60,7 +60,10 @@ describe('Recommend', () => {
       .reply(500, []);
 
     nock('http://cloudant')
-      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
+      .post('/recommendations/_design/recommendations/_search/byGuid', {
+        q: 'guid:\'MyGUID\'',
+        include_docs: true
+      })
       .reply(200, {
         total_rows: 0,
         rows: []
@@ -91,7 +94,10 @@ describe('Recommend', () => {
 
     // intercept the call to persist recommendations
     nock('http://cloudant')
-      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
+      .post('/recommendations/_design/recommendations/_search/byGuid', {
+        q: 'guid:\'MyGUID\'',
+        include_docs: true
+      })
       .reply(200, {
         total_rows: 0,
         rows: []
@@ -130,7 +136,10 @@ describe('Recommend', () => {
 
     // intercept the call to persist recommendations
     nock('http://cloudant')
-      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
+      .post('/recommendations/_design/recommendations/_search/byGuid', {
+        q: 'guid:\'MyGUID\'',
+        include_docs: true
+      })
       .reply(200, {
         total_rows: 0,
         rows: []
@@ -163,7 +172,10 @@ describe('Recommend', () => {
 
     // intercept the call to persist recommendations
     nock('http://cloudant')
-      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
+      .post('/recommendations/_design/recommendations/_search/byGuid', {
+        q: 'guid:\'MyGUID\'',
+        include_docs: true
+      })
       .reply(500);
 
     // trigger a recommendation
@@ -191,7 +203,10 @@ describe('Recommend', () => {
 
     // intercept the call to persist recommendations
     nock('http://cloudant')
-      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
+      .post('/recommendations/_design/recommendations/_search/byGuid', {
+        q: 'guid:\'MyGUID\'',
+        include_docs: true
+      })
       .reply(200, {
         total_rows: 0,
         rows: [{
