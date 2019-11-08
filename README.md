@@ -18,7 +18,7 @@ It is built with IBM Cloud Functions highlighting how Functions can be used to i
 
 For demo purpose, the *Recommend* action can be called interactively to inject a weather event into the system.
 
-![Architecture](https://g.gravizo.com/source/custom_mark10?https%3A%2F%2Fraw.githubusercontent.com%2FIBM-Cloud%2Flogistics-wizard-recommendation%2Fjune-sprint%2FREADME.md)
+![Architecture](https://g.gravizo.com/source/custom_mark10?https%3A%2F%2Fraw.githubusercontent.com%2FIBM-Cloud%2Flogistics-wizard-recommendation%2Fdev%2FREADME.md)
 
 <details> 
 <summary></summary>
@@ -54,24 +54,6 @@ custom_mark10
 
 2. The Recommendation service depends on the [Controller](https://github.com/IBM-Cloud/logistics-wizard-controller) and [ERP](https://github.com/IBM-Cloud/logistics-wizard-erp) microservices. Deploy them first.
 
-3. In IBM Cloud, create an instance of the Weather Company Data service.
-
-  ```
-  ibmcloud service create weatherinsights Free-v2 logistics-wizard-weatherinsights
-  ```
-
-4. Create a set of credentials for this service.
-
-  ```
-  ibmcloud service key-create logistics-wizard-weatherinsights for-openwhisk
-  ```
-
-5. View the credentials and take note of the `url` value.
-
-  ```
-  ibmcloud service key-show logistics-wizard-weatherinsights for-openwhisk
-  ```
-
 6. Create an instance of Cloudant to store the recommendations.
 
   ```
@@ -104,7 +86,7 @@ custom_mark10
   cp template-local.env local.env
   ```
 
-12. In local.env, update the location of the CONTROLLER_SERVICE, the url of the Weather Company Data service, and the url of the Cloudant database.
+12. In local.env, update the location of the CONTROLLER_SERVICE, and the url of the Cloudant database.
 
 13. Get the dependencies, and use [webpack module bundler](https://webpack.github.io/) to create our final .js actions in the `dist` folder.
 
