@@ -27,22 +27,21 @@ if [ -z $FUNCTIONS_NAMESPACE ]; then
   FUNCTIONS_NAMESPACE=logistics-wizard
 fi
 
+if ibmcloud fn namespace get $FUNCTIONS_NAMESPACE > /dev/null 2>&1; then
+  echo "Namespace $FUNCTIONS_NAMESPACE already exists."
+else
+  ibmcloud fn namespace create $FUNCTIONS_NAMESPACE
+fi
+
+NAMESPACE_INSTANCE_ID=$(ibmcloud fn namespace get $FUNCTIONS_NAMESPACE --properties | grep ID | awk '{print $2}')
+ibmcloud fn property set --namespace $NAMESPACE_INSTANCE_ID
+echo "Namespace Instance ID is $NAMESPACE_INSTANCE_ID"
+
 function usage() {
   echo "Usage: $0 [--install,--uninstall,--update,--env]"
 }
 
 function install() {
-
-  if ibmcloud fn namespace get $FUNCTIONS_NAMESPACE > /dev/null 2>&1; then
-    echo "Namespace $FUNCTIONS_NAMESPACE already exists."
-  else
-    ibmcloud fn namespace create $FUNCTIONS_NAMESPACE
-  fi
-
-  NAMESPACE_INSTANCE_ID=$(ibmcloud fn namespace get $FUNCTIONS_NAMESPACE --properties | grep ID | awk '{print $2}')
-  ibmcloud fn property set --namespace $NAMESPACE_INSTANCE_ID
-  echo "Namespace Instance ID is $NAMESPACE_INSTANCE_ID"
-
   echo "Creating database..."
   # ignore "database already exists error"
   curl -s -X PUT $CLOUDANT_URL/$CLOUDANT_DATABASE | grep -v file_exists
