@@ -2,10 +2,10 @@
 
 # Configure the IBM Cloud CLI
 echo Login IBM Cloud api=$CF_TARGET_URL org=$CF_ORG space=$CF_SPACE
-bx login -a "$CF_TARGET_URL" --apikey "$IAM_API_KEY" -o "$CF_ORG" -s "$CF_SPACE"
+ibmcloud login -a "$CF_TARGET_URL" --apikey "$IAM_API_KEY" -o "$CF_ORG" -s "$CF_SPACE" -g "$RESOURCE_GROUP"
 
 echo 'Existing Functions packages'
-bx cloud-functions package list
+ibmcloud cloud-functions package list
 
 # inject the location of the controller service
 domain=".mybluemix.net"
