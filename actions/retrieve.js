@@ -17,7 +17,7 @@
 /**
  * @module retrieve
  */
-const Cloudant = require('cloudant');
+const Cloudant = require('@cloudant/cloudant');
 
 const self = exports;
 

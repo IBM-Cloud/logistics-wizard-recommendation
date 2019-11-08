@@ -7,7 +7,6 @@ module.exports = {
 
   entry: {
     recommend: `${__dirname}/actions/recommend`,
-    observations: `${__dirname}/actions/observations`,
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -19,7 +18,10 @@ module.exports = {
   // The others are expected to come from OpenWhisk.
   // http://webpack.github.io/docs/configuration.html#externals
   externals: (context, request, callback) => {
-    if (context.indexOf('node_modules') === -1 &&
+    if (request.startsWith('@')) {
+      console.log('...', request, 'is assumed to be an external dependency');
+      callback(null, `commonjs ${request}`);
+    } else if (context.indexOf('node_modules') === -1 &&
       request.indexOf('/') === -1 &&
       !dependencies[request]) {
       console.log('...', request, 'is assumed to be an external dependency');

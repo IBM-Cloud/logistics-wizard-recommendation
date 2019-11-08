@@ -20,7 +20,7 @@
 const async = require('async');
 const request = require('request');
 const GeoPoint = require('geopoint');
-const Cloudant = require('cloudant');
+const Cloudant = require('@cloudant/cloudant');
 
 const self = exports;
 

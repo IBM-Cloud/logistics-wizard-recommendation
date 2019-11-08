@@ -23,12 +23,25 @@ if [ -z $PACKAGE_NAME ]; then
   PACKAGE_NAME=lwr
 fi
 
+if [ -z $FUNCTIONS_NAMESPACE ]; then
+  FUNCTIONS_NAMESPACE=logistics-wizard
+fi
+
+if ibmcloud fn namespace get $FUNCTIONS_NAMESPACE > /dev/null 2>&1; then
+  echo "Namespace $FUNCTIONS_NAMESPACE already exists."
+else
+  ibmcloud fn namespace create $FUNCTIONS_NAMESPACE
+fi
+
+NAMESPACE_INSTANCE_ID=$(ibmcloud fn namespace get $FUNCTIONS_NAMESPACE --properties | grep ID | awk '{print $2}')
+ibmcloud fn property set --namespace $NAMESPACE_INSTANCE_ID
+echo "Namespace Instance ID is $NAMESPACE_INSTANCE_ID"
+
 function usage() {
   echo "Usage: $0 [--install,--uninstall,--update,--env]"
 }
 
 function install() {
-
   echo "Creating database..."
   # ignore "database already exists error"
   curl -s -X PUT $CLOUDANT_URL/$CLOUDANT_DATABASE | grep -v file_exists
@@ -38,58 +51,56 @@ function install() {
   curl -s -X POST -H 'Content-Type: application/json' -d @database-designs.json $CLOUDANT_URL/$CLOUDANT_DATABASE/_bulk_docs | grep -v conflict
 
   echo "Creating $PACKAGE_NAME package"
-  bx cloud-functions package create $PACKAGE_NAME\
+  ibmcloud cloud-functions package create $PACKAGE_NAME\
     --param services.controller.url $CONTROLLER_SERVICE\
-    --param services.weather.url $WEATHER_SERVICE\
     --param services.cloudant.url $CLOUDANT_URL\
     --param services.cloudant.database $CLOUDANT_DATABASE
 
   echo "Creating actions"
-  bx cloud-functions action create $PACKAGE_NAME/recommend\
+  ibmcloud cloud-functions action create $PACKAGE_NAME/recommend\
     -a description 'Recommend new shipments based on weather conditions'\
+    --web true\
     dist/recommend.bundle.js
-  bx cloud-functions action create $PACKAGE_NAME/retrieve\
+  ibmcloud cloud-functions action create $PACKAGE_NAME/retrieve\
     -a description 'Return the list of recommendations'\
+    --web true\
     actions/retrieve.js
-  bx cloud-functions action create $PACKAGE_NAME/acknowledge\
+  ibmcloud cloud-functions action create $PACKAGE_NAME/acknowledge\
     -a description 'Acknowledge a list of recommendations'\
+    --web true\
     actions/acknowledge.js
-  bx cloud-functions action create $PACKAGE_NAME/observations\
-    -a description 'Return weather observations for a location'\
-    dist/observations.bundle.js
-  bx cloud-functions action create $PACKAGE_NAME/prepare-for-slack\
+  ibmcloud cloud-functions action create $PACKAGE_NAME/prepare-for-slack\
     -a description 'Transform a recommendation into a Slack message'\
+    --web true\
     actions/prepare-for-slack.js
 }
 
 function uninstall() {
   echo "Removing actions..."
-  bx cloud-functions action delete $PACKAGE_NAME/recommend
-  bx cloud-functions action delete $PACKAGE_NAME/retrieve
-  bx cloud-functions action delete $PACKAGE_NAME/acknowledge
-  bx cloud-functions action delete $PACKAGE_NAME/observations
-  bx cloud-functions action delete $PACKAGE_NAME/prepare-for-slack
+  ibmcloud cloud-functions action delete $PACKAGE_NAME/recommend
+  ibmcloud cloud-functions action delete $PACKAGE_NAME/retrieve
+  ibmcloud cloud-functions action delete $PACKAGE_NAME/acknowledge
+  ibmcloud cloud-functions action delete $PACKAGE_NAME/prepare-for-slack
 
   echo "Removing package..."
-  bx cloud-functions package delete $PACKAGE_NAME
+  ibmcloud cloud-functions package delete $PACKAGE_NAME
 
   echo "Done"
-  bx cloud-functions list
+  ibmcloud cloud-functions list
 }
 
 function update() {
   echo "Updating actions..."
-  bx cloud-functions action update $PACKAGE_NAME/recommend         dist/recommend.bundle.js
-  bx cloud-functions action update $PACKAGE_NAME/retrieve          actions/retrieve.js
-  bx cloud-functions action update $PACKAGE_NAME/acknowledge       actions/acknowledge.js
-  bx cloud-functions action update $PACKAGE_NAME/observations      dist/observations.bundle.js
-  bx cloud-functions action update $PACKAGE_NAME/prepare-for-slack actions/prepare-for-slack.js
+  ibmcloud cloud-functions action update $PACKAGE_NAME/recommend         dist/recommend.bundle.js
+  ibmcloud cloud-functions action update $PACKAGE_NAME/retrieve          actions/retrieve.js
+  ibmcloud cloud-functions action update $PACKAGE_NAME/acknowledge       actions/acknowledge.js
+  ibmcloud cloud-functions action update $PACKAGE_NAME/prepare-for-slack actions/prepare-for-slack.js
 }
 
 function showenv() {
+  echo "FUNCTIONS_NAMESPACE=$FUNCTIONS_NAMESPACE"
   echo "PACKAGE_NAME=$PACKAGE_NAME"
   echo "CONTROLLER_SERVICE=$CONTROLLER_SERVICE"
-  echo "WEATHER_SERVICE=$WEATHER_SERVICE"
   echo "CLOUDANT_URL=$CLOUDANT_URL"
   echo "CLOUDANT_DATABASE=$CLOUDANT_DATABASE"
 }
