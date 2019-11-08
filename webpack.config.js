@@ -18,7 +18,6 @@ module.exports = {
   // The others are expected to come from OpenWhisk.
   // http://webpack.github.io/docs/configuration.html#externals
   externals: (context, request, callback) => {
-    // console.log('\nrequest', context, request);
     if (request.startsWith('@')) {
       console.log('...', request, 'is assumed to be an external dependency');
       callback(null, `commonjs ${request}`);
