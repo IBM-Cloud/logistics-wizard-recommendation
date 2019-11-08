@@ -20,7 +20,10 @@ const nock = require('nock');
 describe('Retrieve', () => {
   it('returns existing recommendations', (done) => {
     nock('http://cloudant')
-      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
+      .post('/recommendations/_design/recommendations/_search/byGuid', {
+        q: 'guid:\'MyGUID\'',
+        include_docs: true
+      })
       .reply(200, {
         rows: [
           {
@@ -62,7 +65,10 @@ describe('Retrieve', () => {
 
   it('handles Cloudant errors', (done) => {
     nock('http://cloudant')
-      .get('/recommendations/_design/recommendations/_search/byGuid?q=guid%3A%27MyGUID%27&include_docs=true')
+      .post('/recommendations/_design/recommendations/_search/byGuid', {
+        q: 'guid:\'MyGUID\'',
+        include_docs: true
+      })
       .reply(500);
 
     retrieve({

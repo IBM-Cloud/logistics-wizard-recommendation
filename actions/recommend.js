@@ -182,9 +182,11 @@ function cleanup(cloudantUrl, cloudantDatabase, demoGuid, callback) {
   console.log('Removing existing recommendations...');
   const cloudant = Cloudant({
     url: cloudantUrl,
-    plugin: 'retry',
-    retryAttempts: 5,
-    retryTimeout: 500
+    plugins: {
+      retry: {
+        retryStatusCodes: [429],
+      }
+    }
   });
   const db = cloudant.use(cloudantDatabase);
   db.search('recommendations', 'byGuid',
@@ -230,9 +232,11 @@ function persist(cloudantUrl, cloudantDatabase, demoGuid, recommendations, callb
   console.log('Persisting', recommendations.length, 'recommendations...');
   const cloudant = Cloudant({
     url: cloudantUrl,
-    plugin: 'retry',
-    retryAttempts: 5,
-    retryTimeout: 500
+    plugins: {
+      retry: {
+        retryStatusCodes: [429],
+      }
+    }
   });
 
   const records = recommendations.map(reco => ({

@@ -64,9 +64,11 @@ function retrieve(cloudantUrl, cloudantDatabase, demoGuid, callback) {
   console.log('Searching index...');
   const cloudant = Cloudant({
     url: cloudantUrl,
-    plugin: 'retry',
-    retryAttempts: 5,
-    retryTimeout: 500
+    plugins: {
+      retry: {
+        retryStatusCodes: [429],
+      }
+    }
   });
 
   const db = cloudant.db.use(cloudantDatabase);
