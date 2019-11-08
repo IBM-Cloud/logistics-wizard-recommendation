@@ -15,9 +15,9 @@
     "geopoint": "1.0.1"
   },
   "devDependencies": {
+    "@cloudant/cloudant": "^4.2.2",
     "async": "2.1.4",
     "chai": "^3.5.0",
-    "cloudant": "1.6.2",
     "coveralls": "^2.11.15",
     "eslint": "^3.9.1",
     "eslint-config-airbnb": "^13.0.0",
