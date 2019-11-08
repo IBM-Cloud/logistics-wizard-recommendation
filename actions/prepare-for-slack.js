@@ -66,7 +66,12 @@ exports.main = global.main = main;
 function makeMessage(cloudantUrl, cloudantDatabase, recommendationId, callback) {
   console.log('Searching index for recommendation...', cloudantUrl, cloudantDatabase, recommendationId);
   const cloudant = Cloudant({
-    url: cloudantUrl
+    url: cloudantUrl,
+    plugins: {
+      retry: {
+        retryStatusCodes: [ 429 ],
+      }
+    }
   });
 
   const db = cloudant.db.use(cloudantDatabase);

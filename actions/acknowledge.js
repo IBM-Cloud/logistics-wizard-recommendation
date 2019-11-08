@@ -69,11 +69,13 @@ function acknowledge(cloudantUrl, cloudantDatabase,
   console.log('Deleting recommendation...');
   const cloudant = Cloudant({
     url: cloudantUrl,
-    plugin: 'retry',
-    retryAttempts: 5,
-    retryTimeout: 500
+    plugins: {
+      retry: {
+        retryStatusCodes: [ 429 ],
+      }
+    }
   });
-
+  
   const db = cloudant.db.use(cloudantDatabase);
   db.get(recommendationId, (getErr, doc) => {
     if (getErr) {
