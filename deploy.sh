@@ -59,15 +59,19 @@ function install() {
   echo "Creating actions"
   ibmcloud cloud-functions action create $PACKAGE_NAME/recommend\
     -a description 'Recommend new shipments based on weather conditions'\
+    --web true\
     dist/recommend.bundle.js
   ibmcloud cloud-functions action create $PACKAGE_NAME/retrieve\
     -a description 'Return the list of recommendations'\
+    --web true\
     actions/retrieve.js
   ibmcloud cloud-functions action create $PACKAGE_NAME/acknowledge\
     -a description 'Acknowledge a list of recommendations'\
+    --web true\
     actions/acknowledge.js
   ibmcloud cloud-functions action create $PACKAGE_NAME/prepare-for-slack\
     -a description 'Transform a recommendation into a Slack message'\
+    --web true\
     actions/prepare-for-slack.js
 }
 
