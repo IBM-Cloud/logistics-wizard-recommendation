@@ -12,8 +12,6 @@ It is built with IBM Cloud Functions highlighting how Functions can be used to i
 
   * **Acknowledge** - marks the recommendations as processed (approved or rejected) by a retail store manager.
 
-  * **Observations** - returns weather conditions at a given location.
-
   * **Notify** - formats recommendations for notification messages.
 
 ### Simulating weather events
@@ -32,7 +30,6 @@ custom_mark10
     recommend -> database;
     database -> notify;
     ui -> retrieve;
-    ui -> observations;
     retrieve -> database;
     ui -> acknowledge;
     acknowledge -> database;
@@ -45,7 +42,6 @@ custom_mark10
     notify [label="Notify" color="%232e8c70" style=filled fontcolor=white];
     retrieve [label="Retrieve" color="%232e8c70" style=filled fontcolor=white];
     acknowledge [label="Acknowledge" color="%232e8c70" style=filled fontcolor=white];
-    observations [label="Observations" color="%232e8c70" style=filled fontcolor=white];
     erp [shape=rect label="ERP service" color="%238ec843" style=filled];
     ui [label="Dashboard" color="%23e8c228" style=filled];
     database [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Database"];
@@ -145,7 +141,6 @@ custom_mark10
 |[**prepare-for-slack.js**](actions/prepare-for-slack.js)|Entry point for the Notify action. It formats newly added recommendations into a text suitable for a Slack post message.|
 |[**retrieve.js**](actions/retrieve.js)|Entry point for the Retrieve action.|
 |[**acknowledge.js**](actions/acknowledge.js)|Entry point for the Acknowledge action.|
-|[**observations.js**](actions/observations.js)|Entry point for the Observations action.|
 |[**test**](test)|Unit test for the actions to be executed outside of Functions.|
 
 ## Troubleshooting

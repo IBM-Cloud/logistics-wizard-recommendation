@@ -67,9 +67,6 @@ function install() {
   ibmcloud cloud-functions action create $PACKAGE_NAME/acknowledge\
     -a description 'Acknowledge a list of recommendations'\
     actions/acknowledge.js
-  ibmcloud cloud-functions action create $PACKAGE_NAME/observations\
-    -a description 'Return weather observations for a location'\
-    dist/observations.bundle.js
   ibmcloud cloud-functions action create $PACKAGE_NAME/prepare-for-slack\
     -a description 'Transform a recommendation into a Slack message'\
     actions/prepare-for-slack.js
@@ -80,7 +77,6 @@ function uninstall() {
   ibmcloud cloud-functions action delete $PACKAGE_NAME/recommend
   ibmcloud cloud-functions action delete $PACKAGE_NAME/retrieve
   ibmcloud cloud-functions action delete $PACKAGE_NAME/acknowledge
-  ibmcloud cloud-functions action delete $PACKAGE_NAME/observations
   ibmcloud cloud-functions action delete $PACKAGE_NAME/prepare-for-slack
 
   echo "Removing package..."
@@ -95,7 +91,6 @@ function update() {
   ibmcloud cloud-functions action update $PACKAGE_NAME/recommend         dist/recommend.bundle.js
   ibmcloud cloud-functions action update $PACKAGE_NAME/retrieve          actions/retrieve.js
   ibmcloud cloud-functions action update $PACKAGE_NAME/acknowledge       actions/acknowledge.js
-  ibmcloud cloud-functions action update $PACKAGE_NAME/observations      dist/observations.bundle.js
   ibmcloud cloud-functions action update $PACKAGE_NAME/prepare-for-slack actions/prepare-for-slack.js
 }
 

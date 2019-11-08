@@ -7,7 +7,6 @@ module.exports = {
 
   entry: {
     recommend: `${__dirname}/actions/recommend`,
-    observations: `${__dirname}/actions/observations`,
   },
   output: {
     path: path.join(__dirname, 'dist'),
