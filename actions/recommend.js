@@ -184,7 +184,7 @@ function cleanup(cloudantUrl, cloudantDatabase, demoGuid, callback) {
     url: cloudantUrl,
     plugins: {
       retry: {
-        retryStatusCodes: [ 429 ],
+        retryStatusCodes: [429],
       }
     }
   });
@@ -234,7 +234,7 @@ function persist(cloudantUrl, cloudantDatabase, demoGuid, recommendations, callb
     url: cloudantUrl,
     plugins: {
       retry: {
-        retryStatusCodes: [ 429 ],
+        retryStatusCodes: [429],
       }
     }
   });

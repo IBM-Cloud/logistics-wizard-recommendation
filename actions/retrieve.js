@@ -66,7 +66,7 @@ function retrieve(cloudantUrl, cloudantDatabase, demoGuid, callback) {
     url: cloudantUrl,
     plugins: {
       retry: {
-        retryStatusCodes: [ 429 ],
+        retryStatusCodes: [429],
       }
     }
   });

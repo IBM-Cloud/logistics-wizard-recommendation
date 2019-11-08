@@ -69,7 +69,7 @@ function makeMessage(cloudantUrl, cloudantDatabase, recommendationId, callback) 
     url: cloudantUrl,
     plugins: {
       retry: {
-        retryStatusCodes: [ 429 ],
+        retryStatusCodes: [429],
       }
     }
   });

@@ -71,11 +71,11 @@ function acknowledge(cloudantUrl, cloudantDatabase,
     url: cloudantUrl,
     plugins: {
       retry: {
-        retryStatusCodes: [ 429 ],
+        retryStatusCodes: [429],
       }
     }
   });
-  
+
   const db = cloudant.db.use(cloudantDatabase);
   db.get(recommendationId, (getErr, doc) => {
     if (getErr) {
