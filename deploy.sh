@@ -73,6 +73,10 @@ function install() {
     -a description 'Transform a recommendation into a Slack message'\
     --web true\
     actions/prepare-for-slack.js
+
+  OPENWHISK_HOST=$(ibmcloud fn property get --apihost -o raw)
+  FUNCTIONS_NAMESPACE_URL=https://${OPENWHISK_HOST}/api/v1/web/${NAMESPACE_INSTANCE_ID}/${PACKAGE_NAME}
+  echo "URL to call functions is $FUNCTIONS_NAMESPACE_URL"
 }
 
 function uninstall() {
